@@ -43,6 +43,7 @@ public final class InteractiveView: UIControl {
     self.addTarget(self, action: #selector(_onTap), for: .touchUpInside)
   }
 
+  @available(*, unavailable)
   public required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -51,4 +52,44 @@ public final class InteractiveView: UIControl {
     onTap()
   }
 
+}
+
+/// Composition
+///
+/// - Author: muukii
+open class AnyWrapperView : UIView {
+
+  public unowned let wrapped: UIView
+
+  public init<T: UIView>(_ wrappedView: T) {
+    self.wrapped = wrappedView
+    super.init(frame: .zero)
+    addSubview(wrappedView)
+    wrappedView.mondrian.layout.edges(.toSuperview).activate()
+  }
+
+  @available(*, unavailable)
+  public required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+}
+
+/// Composition
+///
+/// - Author: muukii
+open class WrapperView<T: UIView> : UIView {
+
+  public unowned let wrapped: T
+
+  public init(_ wrappedView: T) {
+    self.wrapped = wrappedView
+    super.init(frame: .zero)
+    addSubview(wrappedView)
+    wrappedView.mondrian.layout.edges(.toSuperview).activate()
+  }
+
+  @available(*, unavailable)
+  public required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
 }
