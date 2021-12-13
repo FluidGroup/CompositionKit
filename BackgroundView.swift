@@ -1,10 +1,3 @@
-//
-//  BackgroundView.swift
-//  AppUIKit
-//
-//  Created by muukii on 2019/08/19.
-//  Copyright © 2019 eure. All rights reserved.
-//
 
 import Foundation
 

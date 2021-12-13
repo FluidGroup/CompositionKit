@@ -1,10 +1,3 @@
-//
-//  CircularClippingView.swift
-//  AppUIKit
-//
-//  Created by muukii on 2019/09/01.
-//  Copyright © 2019 eure. All rights reserved.
-//
 
 import Foundation
 import MondrianLayout
