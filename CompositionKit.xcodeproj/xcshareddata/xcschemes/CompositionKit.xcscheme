@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4B959AF72764F7180003FFB6"
-               BuildableName = "FluidUIKit.framework"
+               BuildableName = "CompositionKit.framework"
                BlueprintName = "CompositionKit"
                ReferencedContainer = "container:CompositionKit.xcodeproj">
             </BuildableReference>
@@ -51,7 +51,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4B959AF72764F7180003FFB6"
-            BuildableName = "FluidUIKit.framework"
+            BuildableName = "CompositionKit.framework"
             BlueprintName = "CompositionKit"
             ReferencedContainer = "container:CompositionKit.xcodeproj">
          </BuildableReference>

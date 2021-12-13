@@ -1,6 +1,4 @@
-//
-
-import Foundation
+import UIKit
 
 public final class MaskingView: UIView {
 

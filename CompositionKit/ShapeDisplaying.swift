@@ -1,4 +1,6 @@
 
+import UIKit
+
 public protocol ShapeDisplaying: AnyObject {
 
   typealias Update = (CGRect) -> UIBezierPath

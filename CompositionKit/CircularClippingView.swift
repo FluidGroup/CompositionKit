@@ -1,5 +1,5 @@
 
-import Foundation
+import UIKit
 import MondrianLayout
 
 open class CircularClippingView<Body: UIView>: WrapperView<Body> {
