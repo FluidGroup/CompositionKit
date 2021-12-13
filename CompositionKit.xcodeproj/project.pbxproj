@@ -34,6 +34,7 @@
 		4BC3460F2767A6FE00840C5D /* MaskingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC346062767A6FE00840C5D /* MaskingView.swift */; };
 		4BC346102767A6FE00840C5D /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC346072767A6FE00840C5D /* BackgroundView.swift */; };
 		4BC346112767A6FE00840C5D /* ShapeDisplaying.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC346082767A6FE00840C5D /* ShapeDisplaying.swift */; };
+		4BC346132767A83A00840C5D /* InteractiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC346122767A83A00840C5D /* InteractiveView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +94,7 @@
 		4BC346062767A6FE00840C5D /* MaskingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MaskingView.swift; sourceTree = "<group>"; };
 		4BC346072767A6FE00840C5D /* BackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		4BC346082767A6FE00840C5D /* ShapeDisplaying.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShapeDisplaying.swift; sourceTree = "<group>"; };
+		4BC346122767A83A00840C5D /* InteractiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractiveView.swift; sourceTree = "<group>"; };
 		4BE1935A2765B8350008626E /* CompositionKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionKit.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -154,6 +156,7 @@
 				4BC346032767A6FE00840C5D /* ShapeRenderingView.swift */,
 				4BE1935A2765B8350008626E /* CompositionKit.swift */,
 				4B959B2E2764FFCD0003FFB6 /* Logger.swift */,
+				4BC346122767A83A00840C5D /* InteractiveView.swift */,
 			);
 			path = CompositionKit;
 			sourceTree = "<group>";
@@ -312,6 +315,7 @@
 				4BC346092767A6FE00840C5D /* CompositionKit.swift in Sources */,
 				4BC3460B2767A6FE00840C5D /* PaddingView.swift in Sources */,
 				4BC3460D2767A6FE00840C5D /* ShapeLayerView.swift in Sources */,
+				4BC346132767A83A00840C5D /* InteractiveView.swift in Sources */,
 				4BC3460A2767A6FE00840C5D /* CircularClippingView.swift in Sources */,
 				4BC3460E2767A6FE00840C5D /* Logger.swift in Sources */,
 			);
