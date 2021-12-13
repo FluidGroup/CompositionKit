@@ -53,12 +53,6 @@ public final class InteractiveView<ContentView: UIView>: UIControl {
 
     addTarget(
       self,
-      action: #selector(_onTap),
-      for: .touchUpInside
-    )
-
-    addTarget(
-      self,
       action: #selector(_touchUpInside),
       for: .touchUpInside
     )
@@ -104,10 +98,6 @@ public final class InteractiveView<ContentView: UIView>: UIControl {
     coder: NSCoder
   ) {
     fatalError("init(coder:) has not been implemented")
-  }
-
-  @objc private func _onTap() {
-    handlers.onTap()
   }
 
   @objc private func _onLongPress(_ gesture: UILongPressGestureRecognizer) {

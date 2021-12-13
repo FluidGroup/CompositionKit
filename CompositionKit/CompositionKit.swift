@@ -4,6 +4,16 @@ import MondrianLayout
 
 public final class ScrollableContainerView: UIScrollView {
 
+  public init() {
+    super.init(frame: .zero)
+    delaysContentTouches = false
+  }
+
+  @available(*, unavailable)
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
   public func setContent(_ view: UIView) {
 
     subviews.forEach {
