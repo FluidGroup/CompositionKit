@@ -1,9 +1,9 @@
 Pod::Spec.new do |spec|
   spec.name = "CompositionKit"
   spec.version = "0.1.0"
-  spec.summary = "Tools for compositional view hierarchy"
+  spec.summary = "A tool to create composited components"
   spec.description = <<-DESC
-  set of compositional components
+  A tool to create composited components by reusable components.
                    DESC
 
   spec.homepage = "https://github.com/muukii/CompositionKit"
@@ -20,6 +20,6 @@ Pod::Spec.new do |spec|
   spec.source_files = "CompositionKit/**/*.swift"  
   spec.framework = "UIKit"
   spec.requires_arc = true
-  spec.dependency "MondrianLayout", ">= 0.5.0"
+  spec.dependency "MondrianLayout", ">= 0.6.0"
   spec.swift_versions = ["5.3", "5.4", "5.5"]
 end
