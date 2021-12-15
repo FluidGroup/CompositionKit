@@ -6,7 +6,6 @@ public final class ScrollableContainerView: UIScrollView {
 
   public init() {
     super.init(frame: .zero)
-    delaysContentTouches = false
   }
 
   @available(*, unavailable)
