@@ -1,6 +1,11 @@
 import MondrianLayout
 import UIKit
 
+/**
+
+ It uses UIView as superclass to behave like UICollectionViewCell in UIScrollView.
+ UIControl cancels scroll tracking when touch-up-insde detected.
+ */
 public final class InteractiveView<ContentView: UIView>: UIView {
 
   public struct Handlers {
