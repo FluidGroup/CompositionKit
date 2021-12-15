@@ -1,9 +1,9 @@
 Pod::Spec.new do |spec|
   spec.name = "CompositionKit"
   spec.version = "0.1.0"
-  spec.summary = "A tool to create composited components"
+  spec.summary = "A tool to create composite components"
   spec.description = <<-DESC
-  A tool to create composited components by reusable components.
+  A tool to create composite components by reusable components.
                    DESC
 
   spec.homepage = "https://github.com/muukii/CompositionKit"
