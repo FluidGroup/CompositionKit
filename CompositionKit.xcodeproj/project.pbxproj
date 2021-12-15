@@ -12,6 +12,7 @@
 		4B7842BC2765C1900054CE7C /* MondrianLayoutDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 4B7842BB2765C1900054CE7C /* MondrianLayoutDynamic */; };
 		4B7842BD2765C1900054CE7C /* MondrianLayoutDynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 4B7842BB2765C1900054CE7C /* MondrianLayoutDynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4B7842BE2765C2160054CE7C /* CompositionKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE1935A2765B8350008626E /* CompositionKit.swift */; };
+		4B79694A2769A69000F848DA /* AnyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7969492769A69000F848DA /* AnyView.swift */; };
 		4B959B092764F77E0003FFB6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B959B082764F77E0003FFB6 /* AppDelegate.swift */; };
 		4B959B0D2764F77E0003FFB6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B959B0C2764F77E0003FFB6 /* ViewController.swift */; };
 		4B959B122764F77F0003FFB6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B959B112764F77F0003FFB6 /* Assets.xcassets */; };
@@ -75,6 +76,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4B7969492769A69000F848DA /* AnyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyView.swift; sourceTree = "<group>"; };
 		4B959AF82764F7180003FFB6 /* CompositionKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CompositionKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B959B062764F77E0003FFB6 /* CompositionKit-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CompositionKit-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B959B082764F77E0003FFB6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 				4BE1935A2765B8350008626E /* CompositionKit.swift */,
 				4B959B2E2764FFCD0003FFB6 /* Logger.swift */,
 				4BC346122767A83A00840C5D /* InteractiveView.swift */,
+				4B7969492769A69000F848DA /* AnyView.swift */,
 			);
 			path = CompositionKit;
 			sourceTree = "<group>";
@@ -314,6 +317,7 @@
 				4BC3460F2767A6FE00840C5D /* MaskingView.swift in Sources */,
 				4BC346092767A6FE00840C5D /* CompositionKit.swift in Sources */,
 				4BC3460B2767A6FE00840C5D /* PaddingView.swift in Sources */,
+				4B79694A2769A69000F848DA /* AnyView.swift in Sources */,
 				4BC3460D2767A6FE00840C5D /* ShapeLayerView.swift in Sources */,
 				4BC346132767A83A00840C5D /* InteractiveView.swift in Sources */,
 				4BC3460A2767A6FE00840C5D /* CircularClippingView.swift in Sources */,
