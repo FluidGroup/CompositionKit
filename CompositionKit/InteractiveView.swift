@@ -1,7 +1,7 @@
 import MondrianLayout
 import UIKit
 
-public final class InteractiveView<ContentView: UIView>: UIControl {
+public final class InteractiveView<ContentView: UIView>: UIView {
 
   public struct Handlers {
     public var onTap: () -> Void = {}
@@ -21,12 +21,6 @@ public final class InteractiveView<ContentView: UIView>: UIControl {
 
   public var longPressGestureRecognizer: UILongPressGestureRecognizer?
   private let useLongPressGesture: Bool
-
-  public override var isHighlighted: Bool {
-    didSet {
-      animation.animation(isHighlighted, self, animationTargetViw)
-    }
-  }
 
   public init(
     animation: InteractiveViewHighlightAnimation,
@@ -50,18 +44,6 @@ public final class InteractiveView<ContentView: UIView>: UIControl {
     contentView.isUserInteractionEnabled = false
 
     accessibilityTraits = .button
-
-    addTarget(
-      self,
-      action: #selector(_touchUpInside),
-      for: .touchUpInside
-    )
-
-    addTarget(
-      self,
-      action: #selector(_touchDownInside),
-      for: .touchDown
-    )
 
     if let overlayView = overlayView {
 
@@ -93,6 +75,33 @@ public final class InteractiveView<ContentView: UIView>: UIControl {
 
   }
 
+  public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+
+    super.touchesBegan(touches, with: event)
+
+    animation.animation(true, self, animationTargetViw)
+    haptics?.send(event: .onTouchDownInside)
+  }
+
+  public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+
+    super.touchesEnded(touches, with: event)
+    animation.animation(false, self, animationTargetViw)
+    haptics?.send(event: .onTouchUpInside)
+    handlers.onTap()
+  }
+
+  public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+
+    super.touchesMoved(touches, with: event)
+
+  }
+
+  public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+    super.touchesCancelled(touches, with: event)
+    animation.animation(false, self, animationTargetViw)
+  }
+
   @available(*, unavailable)
   public required init?(
     coder: NSCoder
@@ -106,15 +115,6 @@ public final class InteractiveView<ContentView: UIView>: UIControl {
 
     haptics?.send(event: .onLongPress)
     handlers.onLongPress(point)
-  }
-
-  @objc private func _touchDownInside() {
-    haptics?.send(event: .onTouchDownInside)
-  }
-
-  @objc private func _touchUpInside() {
-    haptics?.send(event: .onTouchUpInside)
-    handlers.onTap()
   }
 
 }
