@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/muukii/MondrianLayout.git",
         "state": {
           "branch": null,
-          "revision": "39e0b4d5a3883ea32f6abead763054d5c9723811",
-          "version": "0.7.0"
+          "revision": "45e8051dcd4bc0949a169e4214fafc0dbde66e50",
+          "version": "0.8.0"
         }
       },
       {
@@ -17,6 +17,15 @@
           "branch": null,
           "revision": "e15ea90fd59c8351e9742b2b8837d05ed462bd74",
           "version": "1.8.1"
+        }
+      },
+      {
+        "package": "Wrap",
+        "repositoryURL": "https://github.com/VergeGroup/Wrap.git",
+        "state": {
+          "branch": "main",
+          "revision": "68191d84e48723cb5cd9f6432862b9f22438b0a2",
+          "version": null
         }
       }
     ]

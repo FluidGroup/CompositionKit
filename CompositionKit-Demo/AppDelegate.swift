@@ -1,4 +1,7 @@
 import UIKit
+@_exported import StorybookKit
+@_exported import CompositionKit
+@_exported import Wrap
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
