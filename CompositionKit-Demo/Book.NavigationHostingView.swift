@@ -47,6 +47,16 @@ public enum Book_NavigationHostingView {
 
       navigationView.setContent(navigationContentView)
 
+
+      Mondrian.buildSubviews(on: view) {
+        LayoutContainer(attachedSafeAreaEdges: .all) {
+          ZStackBlock {
+            UIView.mock(backgroundColor: .neon(.cyan))
+              .viewBlock
+              .alignSelf(.attach(.top))
+          }
+        }
+      }
       
     }
   }

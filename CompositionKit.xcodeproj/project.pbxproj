@@ -9,10 +9,6 @@
 /* Begin PBXBuildFile section */
 		4B618C2B277062EF000EA3A4 /* Book.NavigationHostingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B618C2A277062EF000EA3A4 /* Book.NavigationHostingView.swift */; };
 		4B618C2D27706338000EA3A4 /* NavigationHostingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B618C2C27706338000EA3A4 /* NavigationHostingView.swift */; };
-		4B7842B82765C17F0054CE7C /* MondrianLayoutDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 4B7842B72765C17F0054CE7C /* MondrianLayoutDynamic */; };
-		4B7842B92765C17F0054CE7C /* MondrianLayoutDynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 4B7842B72765C17F0054CE7C /* MondrianLayoutDynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		4B7842BC2765C1900054CE7C /* MondrianLayoutDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 4B7842BB2765C1900054CE7C /* MondrianLayoutDynamic */; };
-		4B7842BD2765C1900054CE7C /* MondrianLayoutDynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 4B7842BB2765C1900054CE7C /* MondrianLayoutDynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4B7842BE2765C2160054CE7C /* CompositionKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE1935A2765B8350008626E /* CompositionKit.swift */; };
 		4B79694A2769A69000F848DA /* AnyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7969492769A69000F848DA /* AnyView.swift */; };
 		4B959B092764F77E0003FFB6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B959B082764F77E0003FFB6 /* AppDelegate.swift */; };
@@ -24,7 +20,6 @@
 		4B959B202764F8200003FFB6 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B959B1F2764F8200003FFB6 /* Book.swift */; };
 		4B959B222764F8300003FFB6 /* RootContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B959B212764F8300003FFB6 /* RootContainerViewController.swift */; };
 		4B959B242764F8470003FFB6 /* CompositionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B959AF82764F7180003FFB6 /* CompositionKit.framework */; };
-		4B959B252764F8470003FFB6 /* CompositionKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4B959AF82764F7180003FFB6 /* CompositionKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4B959B2F2764FFCD0003FFB6 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B959B2E2764FFCD0003FFB6 /* Logger.swift */; };
 		4BC346092767A6FE00840C5D /* CompositionKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC346002767A6FE00840C5D /* CompositionKit.swift */; };
 		4BC3460A2767A6FE00840C5D /* CircularClippingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC346012767A6FE00840C5D /* CircularClippingView.swift */; };
@@ -36,6 +31,8 @@
 		4BC346102767A6FE00840C5D /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC346072767A6FE00840C5D /* BackgroundView.swift */; };
 		4BC346112767A6FE00840C5D /* ShapeDisplaying.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC346082767A6FE00840C5D /* ShapeDisplaying.swift */; };
 		4BC346132767A83A00840C5D /* InteractiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC346122767A83A00840C5D /* InteractiveView.swift */; };
+		4BF0DA292770733B007AA8F4 /* MockKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4BF0DA282770733B007AA8F4 /* MockKit */; };
+		4BF0DA2C277073D8007AA8F4 /* Ne in Frameworks */ = {isa = PBXBuildFile; productRef = 4BF0DA2B277073D8007AA8F4 /* Ne */; };
 		4BF6ED602770692600E39ABC /* Wrap in Frameworks */ = {isa = PBXBuildFile; productRef = 4BF6ED5F2770692600E39ABC /* Wrap */; };
 		4BF6ED6227706EE000E39ABC /* UIControl+Closure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF6ED6127706EE000E39ABC /* UIControl+Closure.swift */; };
 		F4364F51509E075C432AFD6F /* Pods_CompositionKit_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1D2985EAADF294EB8B2CAFC /* Pods_CompositionKit_Demo.framework */; };
@@ -58,19 +55,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4B7842B92765C17F0054CE7C /* MondrianLayoutDynamic in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4B959B282764F8470003FFB6 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				4B959B252764F8470003FFB6 /* CompositionKit.framework in Embed Frameworks */,
-				4B7842BD2765C1900054CE7C /* MondrianLayoutDynamic in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -112,7 +96,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4B7842B82765C17F0054CE7C /* MondrianLayoutDynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,11 +103,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BF0DA292770733B007AA8F4 /* MockKit in Frameworks */,
+				4BF0DA2C277073D8007AA8F4 /* Ne in Frameworks */,
 				4BF6ED602770692600E39ABC /* Wrap in Frameworks */,
 				4B959B1C2764F7B30003FFB6 /* StorybookKit in Frameworks */,
 				4B959B1E2764F7B30003FFB6 /* StorybookUI in Frameworks */,
 				4B959B242764F8470003FFB6 /* CompositionKit.framework in Frameworks */,
-				4B7842BC2765C1900054CE7C /* MondrianLayoutDynamic in Frameworks */,
 				F4364F51509E075C432AFD6F /* Pods_CompositionKit_Demo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -234,7 +218,6 @@
 			);
 			name = CompositionKit;
 			packageProductDependencies = (
-				4B7842B72765C17F0054CE7C /* MondrianLayoutDynamic */,
 			);
 			productName = FluidUIKit;
 			productReference = 4B959AF82764F7180003FFB6 /* CompositionKit.framework */;
@@ -248,7 +231,6 @@
 				4B959B022764F77E0003FFB6 /* Sources */,
 				4B959B032764F77E0003FFB6 /* Frameworks */,
 				4B959B042764F77E0003FFB6 /* Resources */,
-				4B959B282764F8470003FFB6 /* Embed Frameworks */,
 				A7F335C2318F5F836FE900A6 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -260,8 +242,9 @@
 			packageProductDependencies = (
 				4B959B1B2764F7B30003FFB6 /* StorybookKit */,
 				4B959B1D2764F7B30003FFB6 /* StorybookUI */,
-				4B7842BB2765C1900054CE7C /* MondrianLayoutDynamic */,
 				4BF6ED5F2770692600E39ABC /* Wrap */,
+				4BF0DA282770733B007AA8F4 /* MockKit */,
+				4BF0DA2B277073D8007AA8F4 /* Ne */,
 			);
 			productName = "FluidUIKit-Demo";
 			productReference = 4B959B062764F77E0003FFB6 /* CompositionKit-Demo.app */;
@@ -299,6 +282,8 @@
 				4B959B1A2764F7B30003FFB6 /* XCRemoteSwiftPackageReference "Storybook-ios" */,
 				4B959B292764F8620003FFB6 /* XCRemoteSwiftPackageReference "MondrianLayout" */,
 				4BF6ED5E2770692600E39ABC /* XCRemoteSwiftPackageReference "Wrap" */,
+				4BF0DA272770733B007AA8F4 /* XCRemoteSwiftPackageReference "MockKit" */,
+				4BF0DA2A277073D8007AA8F4 /* XCRemoteSwiftPackageReference "Ne" */,
 			);
 			productRefGroup = 4B959AF92764F7180003FFB6 /* Products */;
 			projectDirPath = "";
@@ -568,6 +553,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MACH_O_TYPE = staticlib;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = app.muukii.CompositionKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -597,6 +583,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MACH_O_TYPE = staticlib;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = app.muukii.CompositionKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -611,7 +598,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F3B92B4043C3FC8D18965FB4 /* Pods-CompositionKit-Demo.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -639,7 +625,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = ECBE8F047CF72069430CBA55 /* Pods-CompositionKit-Demo.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -712,6 +697,22 @@
 				minimumVersion = 0.5.0;
 			};
 		};
+		4BF0DA272770733B007AA8F4 /* XCRemoteSwiftPackageReference "MockKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/muukii/MockKit.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		4BF0DA2A277073D8007AA8F4 /* XCRemoteSwiftPackageReference "Ne" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/muukii/Ne.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		4BF6ED5E2770692600E39ABC /* XCRemoteSwiftPackageReference "Wrap" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/VergeGroup/Wrap.git";
@@ -723,16 +724,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		4B7842B72765C17F0054CE7C /* MondrianLayoutDynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4B959B292764F8620003FFB6 /* XCRemoteSwiftPackageReference "MondrianLayout" */;
-			productName = MondrianLayoutDynamic;
-		};
-		4B7842BB2765C1900054CE7C /* MondrianLayoutDynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4B959B292764F8620003FFB6 /* XCRemoteSwiftPackageReference "MondrianLayout" */;
-			productName = MondrianLayoutDynamic;
-		};
 		4B959B1B2764F7B30003FFB6 /* StorybookKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4B959B1A2764F7B30003FFB6 /* XCRemoteSwiftPackageReference "Storybook-ios" */;
@@ -742,6 +733,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4B959B1A2764F7B30003FFB6 /* XCRemoteSwiftPackageReference "Storybook-ios" */;
 			productName = StorybookUI;
+		};
+		4BF0DA282770733B007AA8F4 /* MockKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4BF0DA272770733B007AA8F4 /* XCRemoteSwiftPackageReference "MockKit" */;
+			productName = MockKit;
+		};
+		4BF0DA2B277073D8007AA8F4 /* Ne */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4BF0DA2A277073D8007AA8F4 /* XCRemoteSwiftPackageReference "Ne" */;
+			productName = Ne;
 		};
 		4BF6ED5F2770692600E39ABC /* Wrap */ = {
 			isa = XCSwiftPackageProductDependency;
