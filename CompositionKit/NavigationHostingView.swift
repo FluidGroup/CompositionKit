@@ -12,6 +12,8 @@ open class NavigationHostingView : UIView {
 
   /**
    a view that hosts the content.
+
+   - Warning: DO NOT work with this directly.
    */
   public final let contentView = UIView()
 
@@ -31,6 +33,7 @@ open class NavigationHostingView : UIView {
     }
   }
 
+  /// a view that attaches to the top of the display.
   private let backDropView: UIView = .init()
 
   private var contentViewHeight: NSLayoutConstraint!
@@ -55,6 +58,9 @@ open class NavigationHostingView : UIView {
   public override init(frame: CGRect) {
 
     super.init(frame: frame)
+
+    /// Needs to visible backdrop-view
+    clipsToBounds = false
 
     backgroundColor = .clear
 
@@ -128,6 +134,9 @@ open class NavigationHostingView : UIView {
 
 extension NavigationHostingView {
 
+  /**
+   Sets a content view with cleanup current content view.
+   */
   public func setContent(_ content: UIView) {
 
     contentView.subviews.forEach {

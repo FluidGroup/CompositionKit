@@ -5,18 +5,16 @@ open class AnyView: UIView {
 
   private var _onDeinit: (() -> Void)?
 
-  public init(build: (AnyView) -> LayoutContainer) {
-    super.init(frame: .zero)
-    mondrian.buildSubviews {
-      build(self)
-    }
-  }
+  public init(@EntrypointBuilder build: (AnyView) -> [EntrypointBuilder.Either]) {
 
-  public init<Block: _LayoutBlockType>(build: (AnyView) -> Block) {
-    super.init(frame: .zero)
-    mondrian.buildSubviews {
+    super.init(frame: .null)
+
+    let _b: () -> [EntrypointBuilder.Either] = {
       build(self)
     }
+
+    Mondrian.buildSubviews(on: self, _b)
+
   }
 
   @available(*, unavailable)
