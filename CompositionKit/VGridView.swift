@@ -6,6 +6,8 @@ import UIKit
 public final class VGridView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
   private var contents: [UIView] = []
 
+  private let layout: UICollectionViewCompositionalLayout
+
   public convenience init(contents: [UIView]) {
     self.init()
     self.contents = contents
@@ -44,17 +46,36 @@ public final class VGridView: UICollectionView, UICollectionViewDataSource, UICo
     let section = NSCollectionLayoutSection(group: group)
     let layout = UICollectionViewCompositionalLayout.init(section: section)
 
+    self.layout = layout
+
     super.init(frame: .null, collectionViewLayout: layout)
 
+    #if DEBUG
+    backgroundColor = .blue
+    #endif
+
+    Mondrian.layout {
+      mondrian.layout
+        .height(.min(1))
+        .height(.to(contentLayoutGuide).height)
+    }
+//
 //    frameLayoutGuide.mondrian.layout
 //      .edges(.to(contentLayoutGuide), .exact(0, .defaultHigh))
 //      .activate()
 
     register(_WrapperCell.self, forCellWithReuseIdentifier: "Cell")
 
+    isScrollEnabled = false
+
     dataSource = self
     delegate = self
+
   }
+
+//  public override var intrinsicContentSize: CGSize {
+//    layout.collectionViewContentSize
+//  }
 
   @available(*, unavailable)
   public required init?(coder: NSCoder) {
