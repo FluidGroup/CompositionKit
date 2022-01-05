@@ -22,6 +22,8 @@ Pod::Spec.new do |spec|
   spec.dependency "MondrianLayout", ">= 0.8.0"
   spec.swift_versions = ["5.3", "5.4", "5.5"]
 
+  spec.default_subspecs = ["Core"]
+
   spec.subspec "Core" do |ss|
     ss.source_files = "Sources/CompositionKit/**/*.swift"
   end
