@@ -17,9 +17,18 @@ Pod::Spec.new do |spec|
   # spec.tvos.deployment_target = "9.0"
 
   spec.source = { :git => "https://github.com/muukii/CompositionKit.git", :tag => "#{spec.version}" }
-  spec.source_files = "CompositionKit/**/*.swift"  
   spec.framework = "UIKit"
   spec.requires_arc = true
-  spec.dependency "MondrianLayout", ">= 0.6.0"
+  spec.dependency "MondrianLayout", ">= 0.8.0"
   spec.swift_versions = ["5.3", "5.4", "5.5"]
+
+  spec.subspec "Core" do |ss|
+    ss.source_files = "Sources/CompositionKit/**/*.swift"
+  end
+
+  spec.subspec "VergeComponents" do |ss|
+    ss.source_files = "Sources/VergeComponents/**/*.swift"
+    ss.dependency "CompositionKit/Core"
+    ss.dependency "Verge/Store"
+  end
 end
