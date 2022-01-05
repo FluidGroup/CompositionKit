@@ -46,10 +46,6 @@ public class _GridView: UICollectionView, UICollectionViewDataSource, UICollecti
 
     super.init(frame: .null, collectionViewLayout: layout)
 
-#if DEBUG
-    backgroundColor = .blue
-#endif
-
     register(_WrapperCell.self, forCellWithReuseIdentifier: "Cell")
 
     isScrollEnabled = false
