@@ -6,7 +6,7 @@ let package = Package(
   platforms: [.iOS(.v12)],
   products: [
     .library(name: "CompositionKit", targets: ["CompositionKit"]),
-    .library(name: "CompositionKitVerge", targets: ["VergeComponents"]),
+    .library(name: "CompositionKitVerge", targets: ["CompositionKitVerge"]),
   ],
   dependencies: [
     .package(url: "https://github.com/muukii/MondrianLayout.git", from: "0.8.0"),
@@ -18,7 +18,7 @@ let package = Package(
       dependencies: ["MondrianLayout"]
     ),
     .target(
-      name: "VergeComponents",
+      name: "CompositionKitVerge",
       dependencies: ["Verge", "CompositionKit"]
     )
   ]
