@@ -1,8 +1,6 @@
 import Foundation
 import MondrianLayout
 import UIKit
-import Verge
-import CompositionKit
 
 /*
 #if canImport(StorybookKit)
@@ -237,7 +235,9 @@ open class DynamicSizingCollectionViewCell: UICollectionViewCell {
 open class DynamicContentListView<Data: Hashable>: CodeBasedView {
 
   @available(iOS 14, *)
-  public typealias CellRegistration<Cell: UICollectionViewCell> = UICollectionView.CellRegistration<Cell, Data>
+  public typealias CellRegistration<Cell: UICollectionViewCell> = UICollectionView.CellRegistration<
+    Cell, Data
+  >
 
   private enum Section: Hashable {
     case main
@@ -259,37 +259,73 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
 
   private var _didSelectItemAt: ((Data) -> Void)?
 
-  private var _dynamicContentCancellable: VergeAnyCancellable?
-
   private var dataSource: UICollectionViewDiffableDataSource<Section, Data>!
 
   public init(
+    scrollDirection: UICollectionView.ScrollDirection,
+    spacing: CGFloat = 0,
     contentInsetAdjustmentBehavior: UIScrollView.ContentInsetAdjustmentBehavior = .never
   ) {
 
-    let group = NSCollectionLayoutGroup.vertical(
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(0)
-      ),
-      subitems: [
-        NSCollectionLayoutItem(
-          layoutSize: NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(0)
+    switch scrollDirection {
+    case .vertical:
+
+      let group = NSCollectionLayoutGroup.vertical(
+        layoutSize: NSCollectionLayoutSize(
+          widthDimension: .fractionalWidth(1.0),
+          heightDimension: .estimated(0)
+        ),
+        subitems: [
+          NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+              widthDimension: .fractionalWidth(1.0),
+              heightDimension: .estimated(0)
+            )
           )
-        )
-      ]
-    )
+        ]
+      )
 
-    let section = NSCollectionLayoutSection(group: group)
-    let layout = UICollectionViewCompositionalLayout.init(section: section)
+      let section = NSCollectionLayoutSection(group: group)
+      section.interGroupSpacing = spacing
+      
+      let configuration = UICollectionViewCompositionalLayoutConfiguration()
+      configuration.scrollDirection = scrollDirection
 
-    self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+      let layout = UICollectionViewCompositionalLayout.init(section: section)
+
+      self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+
+    case .horizontal:
+
+      let group = NSCollectionLayoutGroup.horizontal(
+        layoutSize: .init(widthDimension: .estimated(100), heightDimension: .fractionalHeight(1)),
+        subitems: [
+          .init(
+            layoutSize: .init(
+              widthDimension: .estimated(100),
+              heightDimension: .fractionalHeight(1)
+            )
+          )
+        ]
+      )
+
+      let section = NSCollectionLayoutSection(group: group)
+      section.interGroupSpacing = spacing
+
+      let configuration = UICollectionViewCompositionalLayoutConfiguration()
+      configuration.scrollDirection = scrollDirection
+
+      let layout = UICollectionViewCompositionalLayout.init(section: section, configuration: configuration)
+
+      self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+
+    @unknown default:
+      fatalError()
+    }
 
     super.init(frame: .zero)
 
-    backgroundColor = .clear
+    self.backgroundColor = .clear
     self.collectionView.backgroundColor = .clear
     self.collectionView.contentInsetAdjustmentBehavior = contentInsetAdjustmentBehavior
 
@@ -303,7 +339,7 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
       collectionView: collectionView,
       cellProvider: { [unowned self] collectionView, indexPath, item in
         guard let delegate = self._cellForItemAt else {
-          assertionFailure("It needs to set closure that return node-block by `setDynamicContent`")
+          assertionFailure("Needs setup before start using.")
           return UICollectionViewCell(frame: .zero)
         }
         let data = item
@@ -328,7 +364,10 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
 
   }
 
-  public func registerCell<Cell: UICollectionViewCell>(_ cellType: Cell.Type, forCellWithReuseIdentifier: String) {
+  public func registerCell<Cell: UICollectionViewCell>(
+    _ cellType: Cell.Type,
+    forCellWithReuseIdentifier: String
+  ) {
     collectionView.register(cellType, forCellWithReuseIdentifier: forCellWithReuseIdentifier)
   }
 
@@ -339,26 +378,22 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
   }
 
   public func setUp(
-    dynamicContent: Derived<[Data]>,
-    animatedUpdating: Bool = true,
     cellForItemAt: @escaping (UICollectionView, Data, IndexPath) -> UICollectionViewCell,
     didSelectItemAt: @escaping (Data) -> Void
   ) {
 
     _didSelectItemAt = didSelectItemAt
     _cellForItemAt = cellForItemAt
+  }
 
-    _dynamicContentCancellable?.cancel()
+  public func setContents(_ contents: [Data], animatedUpdating: Bool = true) {
 
-    _dynamicContentCancellable = dynamicContent.sinkChangedPrimitiveValue(queue: .mainIsolated()) {
-      [weak self] value in
+    var snapshot = NSDiffableDataSourceSnapshot<Section, Data>.init()
+    snapshot.appendSections([.main])
+    snapshot.appendItems(contents, toSection: .main)
 
-      var snapshot = NSDiffableDataSourceSnapshot<Section, Data>.init()
-      snapshot.appendItems(value, toSection: .main)
+    dataSource.apply(snapshot, animatingDifferences: animatedUpdating)
 
-      self?.dataSource.apply(snapshot, animatingDifferences: animatedUpdating)
-
-    }
   }
 
 }
