@@ -241,7 +241,7 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
 
   private enum Section: Hashable {
     case main
-  }  
+  }
 
   public var scrollView: UIScrollView {
     collectionView
