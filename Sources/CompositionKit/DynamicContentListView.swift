@@ -396,6 +396,10 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
 
   }
 
+  public func setContentInset(_ insets: UIEdgeInsets) {
+    collectionView.contentInset = insets
+  }
+
 }
 
 private final class _DynamicContentListViewDelegateProxy: NSObject,
