@@ -1,0 +1,3 @@
+[submodule "submodules/Descriptors"]
+	path = submodules/Descriptors
+	url = git@github.com:muukii/Descriptors.git

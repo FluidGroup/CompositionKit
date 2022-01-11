@@ -36,6 +36,7 @@
 		4B959B1F2764F8200003FFB6 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		4B959B212764F8300003FFB6 /* RootContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootContainerViewController.swift; sourceTree = "<group>"; };
 		4BBBC6492780450200973154 /*  */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ""; sourceTree = "<group>"; };
+		4BF59288278D43F6003CC4BA /* Descriptors */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Descriptors; path = submodules/Descriptors; sourceTree = "<group>"; };
 		4BF6ED6127706EE000E39ABC /* UIControl+Closure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Closure.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -95,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				4BBBC6492780450200973154 /*  */,
+				4BF59288278D43F6003CC4BA /* Descriptors */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
