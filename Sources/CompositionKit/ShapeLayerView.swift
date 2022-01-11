@@ -1,6 +1,7 @@
 
 import UIKit
 import MondrianLayout
+import Descriptors
 
 public class _ShapeLayerView: UIView {
   public override class var layerClass: AnyClass {

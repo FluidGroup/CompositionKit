@@ -16,7 +16,7 @@ let package = Package(
   targets: [
     .target(
       name: "CompositionKit",
-      dependencies: ["MondrianLayout"]
+      dependencies: ["MondrianLayout", "Descriptors"]
     ),
     .target(
       name: "CompositionKitVerge",
