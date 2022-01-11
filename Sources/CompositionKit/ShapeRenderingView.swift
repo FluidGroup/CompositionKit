@@ -1,6 +1,7 @@
 
 import UIKit
 import MondrianLayout
+import Descriptors
 
 public final class ShapeRenderingView: UIView, ShapeDisplaying {
 
