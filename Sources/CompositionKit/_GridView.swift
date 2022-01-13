@@ -53,6 +53,8 @@ public class _GridView: UICollectionView, UICollectionViewDataSource, UICollecti
     dataSource = self
     delegate = self
 
+    backgroundColor = .clear
+
   }
 
   @available(*, unavailable)
