@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name = "CompositionKit"
-  spec.version = "0.2.0"
+  spec.version = "0.2.1"
   spec.summary = "A tool to create composite components"
   spec.description = <<-DESC
   A tool to create composite components by reusable components.
