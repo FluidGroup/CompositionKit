@@ -2,6 +2,8 @@
 import UIKit
 import MondrianLayout
 
+@_exported import Descriptors
+
 public final class ScrollableContainerView: UIScrollView {
 
   public init() {
