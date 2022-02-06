@@ -1,9 +1,11 @@
 
 import UIKit
 import MondrianLayout
-
 @_exported import Descriptors
 
+/**
+ ScrollView based that wraps a content
+ */
 public final class ScrollableContainerView: UIScrollView {
 
   public init() {
