@@ -12,7 +12,10 @@ public class _GridView: UICollectionView, UICollectionViewDataSource, UICollecti
 
   private let layout: UICollectionViewCompositionalLayout
 
-  init(scrollDirection: UICollectionView.ScrollDirection, numberOfColumns: Int) {
+  init(
+    scrollDirection: UICollectionView.ScrollDirection,
+    numberOfColumns: Int
+  ) {
 
     let column = NSCollectionLayoutGroup.horizontal(
       layoutSize: NSCollectionLayoutSize(
@@ -26,7 +29,7 @@ public class _GridView: UICollectionView, UICollectionViewDataSource, UICollecti
         )
       }
     )
-
+        
     let group = NSCollectionLayoutGroup.vertical(
       layoutSize: NSCollectionLayoutSize(
         widthDimension: .fractionalWidth(1.0),
@@ -36,7 +39,7 @@ public class _GridView: UICollectionView, UICollectionViewDataSource, UICollecti
         column
       ]
     )
-
+          
     let section = NSCollectionLayoutSection(group: group)
     let layout = UICollectionViewCompositionalLayout.init(section: section)
 
@@ -48,7 +51,7 @@ public class _GridView: UICollectionView, UICollectionViewDataSource, UICollecti
 
     register(_WrapperCell.self, forCellWithReuseIdentifier: "Cell")
 
-    isScrollEnabled = false
+    isScrollEnabled = true
 
     dataSource = self
     delegate = self
