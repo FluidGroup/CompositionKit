@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name = "CompositionKit"
-  spec.version = "0.2.1"
+  spec.version = "0.3.0"
   spec.summary = "A tool to create composite components"
   spec.description = <<-DESC
   A tool to create composite components by reusable components.
@@ -26,7 +26,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec "Core" do |ss|
     ss.source_files = "Sources/CompositionKit/**/*.swift"
-    ss.dependency "Descriptors", ">= 0.1.0"
+    ss.dependency "Descriptors", ">= 0.2.0"
   end
 
 #  spec.subspec "VergeComponents" do |ss|
