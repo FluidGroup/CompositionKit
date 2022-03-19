@@ -1,4 +1,5 @@
 import Descriptors
+import UIKit
 
 open class GradientLayerView : UIView {
   
