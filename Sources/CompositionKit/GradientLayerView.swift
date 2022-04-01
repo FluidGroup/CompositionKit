@@ -1,25 +1,17 @@
 import Descriptors
+import UIKit
 
 open class GradientLayerView : UIView {
   
-  private let gradientLayer = CAGradientLayer()
-  
-  public override init(frame: CGRect) {
-    super.init(frame: frame)
-    layer.addSublayer(gradientLayer)
+  open override class var layerClass: AnyClass {
+    return CAGradientLayer.self
   }
   
-  @available(*, unavailable)
-  public required init?(coder aDecoder: NSCoder) {
-    fatalError()
-  }
-  
-  open override func layoutSubviews() {
-    super.layoutSubviews()
-    gradientLayer.frame = bounds
+  open override var layer: CAGradientLayer {
+    super.layer as! CAGradientLayer
   }
   
   open func set(descriptor: LinearGradientDescriptor) {
-    descriptor.apply(to: gradientLayer)
+    descriptor.apply(to: layer)
   }
 }
