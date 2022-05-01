@@ -1,14 +1,16 @@
-
-import UIKit
-import MondrianLayout
 @_exported import Descriptors
+import MondrianLayout
+import UIKit
 
-/**
- ScrollView based that wraps a content
- */
+/// ScrollView based that wraps a content
 public final class ScrollableContainerView: UIScrollView {
 
-  public init() {
+  public typealias ScrollDirection = UICollectionView.ScrollDirection
+
+  public let scrollDirection: ScrollDirection
+
+  public init(scrollDirection: ScrollDirection = .vertical) {
+    self.scrollDirection = scrollDirection
     super.init(frame: .zero)
   }
 
@@ -27,14 +29,31 @@ public final class ScrollableContainerView: UIScrollView {
 
     view.translatesAutoresizingMaskIntoConstraints = false
 
-    NSLayoutConstraint.activate([
-      view.leftAnchor.constraint(equalTo: frameLayoutGuide.leftAnchor),
-      view.rightAnchor.constraint(equalTo: frameLayoutGuide.rightAnchor),
-      view.leftAnchor.constraint(equalTo: contentLayoutGuide.leftAnchor),
-      view.rightAnchor.constraint(equalTo: contentLayoutGuide.rightAnchor),
-      view.topAnchor.constraint(equalTo: contentLayoutGuide.topAnchor),
-      view.bottomAnchor.constraint(equalTo: contentLayoutGuide.bottomAnchor),
-    ])
+    switch scrollDirection {
+    case .vertical:
+
+      NSLayoutConstraint.activate([
+        view.leftAnchor.constraint(equalTo: frameLayoutGuide.leftAnchor),
+        view.rightAnchor.constraint(equalTo: frameLayoutGuide.rightAnchor),
+
+        view.leftAnchor.constraint(equalTo: contentLayoutGuide.leftAnchor),
+        view.rightAnchor.constraint(equalTo: contentLayoutGuide.rightAnchor),
+        view.topAnchor.constraint(equalTo: contentLayoutGuide.topAnchor),
+        view.bottomAnchor.constraint(equalTo: contentLayoutGuide.bottomAnchor),
+      ])
+    case .horizontal:
+      NSLayoutConstraint.activate([
+        view.topAnchor.constraint(equalTo: frameLayoutGuide.topAnchor),
+        view.bottomAnchor.constraint(equalTo: frameLayoutGuide.bottomAnchor),
+
+        view.leftAnchor.constraint(equalTo: contentLayoutGuide.leftAnchor),
+        view.rightAnchor.constraint(equalTo: contentLayoutGuide.rightAnchor),
+        view.topAnchor.constraint(equalTo: contentLayoutGuide.topAnchor),
+        view.bottomAnchor.constraint(equalTo: contentLayoutGuide.bottomAnchor),
+      ])
+    @unknown default:
+      assertionFailure()
+    }
 
   }
 
@@ -43,7 +62,7 @@ public final class ScrollableContainerView: UIScrollView {
 /// Composition
 ///
 /// - Author: muukii
-open class AnyWrapperView : UIView {
+open class AnyWrapperView: UIView {
 
   public unowned let wrapped: UIView
 
@@ -63,7 +82,7 @@ open class AnyWrapperView : UIView {
 /// Composition
 ///
 /// - Author: muukii
-open class WrapperView<T: UIView> : UIView {
+open class WrapperView<T: UIView>: UIView {
 
   public unowned let wrapped: T
 
