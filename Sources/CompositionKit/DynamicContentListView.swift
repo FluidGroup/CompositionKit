@@ -328,12 +328,15 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
     self.backgroundColor = .clear
     self.collectionView.backgroundColor = .clear
     self.collectionView.contentInsetAdjustmentBehavior = contentInsetAdjustmentBehavior
-
-    Mondrian.buildSubviews(on: self) {
-      ZStackBlock {
-        collectionView.viewBlock.alignSelf(.attach(.all))
-      }
-    }
+ 
+    collectionView.translatesAutoresizingMaskIntoConstraints = false
+    
+    NSLayoutConstraint.activate([
+      collectionView.topAnchor.constraint(equalTo: topAnchor),
+      collectionView.rightAnchor.constraint(equalTo: rightAnchor),
+      collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
+      collectionView.leftAnchor.constraint(equalTo: leftAnchor),
+    ])
 
     let dataSource = UICollectionViewDiffableDataSource<Section, Data>(
       collectionView: collectionView,
@@ -363,7 +366,7 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
     self.collectionView.dataSource = dataSource
 
   }
-
+  
   public func registerCell<Cell: UICollectionViewCell>(
     _ cellType: Cell.Type,
     forCellWithReuseIdentifier: String
