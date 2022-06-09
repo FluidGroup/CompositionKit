@@ -2,172 +2,6 @@ import Foundation
 import MondrianLayout
 import UIKit
 
-/*
-#if canImport(StorybookKit)
-import StorybookKit
-import UIKit
-@available(iOS 13, *)
-enum DynamicContentListView_BookView {
-
-  static var body: BookView {
-    BookNavigationLink(title: "DynamicContentListView") {
-      BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
-        let v = DynamicContentListView<CellModel>()
-
-        v.registerCell(MyCell.self)
-
-        v.setUp(
-          dynamicContent: .constant([.init(name: "1"), .init(name: "2"), .init(name: "3")]),
-          cellForItemAt: { collectionView, data, indexPath in
-            let cell = collectionView.dequeueReusableCell(for: indexPath, cellType: MyCell.self)
-            cell.attach(cellModel: data)
-            return cell
-          },
-          didSelectItemAt: { item in
-
-          }
-        )
-
-        return v
-      }
-
-      BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
-        let v = DynamicContentListView<CellModel>()
-
-        v.registerCell(MyCell.self)
-
-        v.setUp(
-          dynamicContent: .constant((0..<100).map { .init(name: "\($0)") }),
-          cellForItemAt: { collectionView, data, indexPath in
-            let cell = collectionView.dequeueReusableCell(for: indexPath, cellType: MyCell.self)
-            cell.attach(cellModel: data)
-            return cell
-          },
-          didSelectItemAt: { item in
-
-          }
-        )
-
-        return v
-      }
-    }
-  }
-
-  final class CellModel: StatefulObjectBase, StoreComponentType {
-
-    struct State: Equatable {
-      let name: String
-      var text: String
-    }
-
-    let store: DefaultStore
-
-    init(
-      name: String
-    ) {
-
-      self.store = .init(initialState: .init(name: name, text: "Text"))
-
-      super.init()
-    }
-
-    func updateText() {
-      commit {
-        $0.text = BookGenerator.loremIpsum(
-          length: stride(from: 10, to: 100, by: 5).map { $0 }.randomElement()!
-        )
-      }
-    }
-
-  }
-
-  final class MyCell: DynamicSizingCollectionViewCell, Reusable {
-
-    let label = UILabel()
-    let descriptionLabel = UILabel()
-    let button = UIButton(type: .system)
-
-    private var subscription: VergeAnyCancellable?
-    private var currentCellModel: CellModel?
-    private let disposeBag = DisposeBag()
-
-    override init(
-      frame: CGRect
-    ) {
-      super.init(frame: frame)
-
-      backgroundColor = .init(white: 0, alpha: 0.1)
-      label.numberOfLines = 0
-      descriptionLabel.numberOfLines = 0
-
-      button.setTitle("Update", for: .normal)
-
-      contentView.mondrian.buildSubviews {
-        VStackBlock(spacing: 8) {
-          label
-          descriptionLabel
-          button
-        }
-        .padding(16)
-        .background(
-          UIView()&>.do {
-            $0.layer.borderColor = UIColor(white: 0, alpha: 0.2).cgColor
-            $0.layer.borderWidth = 4
-          }
-        )
-      }
-
-      button.rx.tap.bind { [unowned self] _ in
-        currentCellModel?.updateText()
-      }
-      .disposed(by: disposeBag)
-
-    }
-
-    override func prepareForReuse() {
-      super.prepareForReuse()
-
-    }
-
-    func attach(cellModel: CellModel) {
-
-      currentCellModel = cellModel
-
-      subscription?.cancel()
-      subscription = cellModel.sinkState(scan: .counter()) { [weak self] state, count in
-
-        guard let self = self else { return }
-
-        state.ifChanged(\.name) { name in
-          self.label.text = name
-        }
-
-        state.ifChanged(\.text) { text in
-          self.descriptionLabel.text = text
-
-          if count > 1 {
-            self.layoutWithInvalidatingCollectionViewLayout(animated: true)
-          }
-        }
-
-      }
-    }
-
-  }
-
-  struct Item: Equatable, Differentiable {
-
-    var differenceIdentifier: String {
-      name
-    }
-
-    let name: String
-  }
-
-}
-#endif
- */
-
 open class DynamicSizingCollectionViewCell: UICollectionViewCell {
 
   public override init(
@@ -273,13 +107,13 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
       let group = NSCollectionLayoutGroup.vertical(
         layoutSize: NSCollectionLayoutSize(
           widthDimension: .fractionalWidth(1.0),
-          heightDimension: .estimated(0)
+          heightDimension: .estimated(50)
         ),
         subitems: [
           NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
               widthDimension: .fractionalWidth(1.0),
-              heightDimension: .estimated(0)
+              heightDimension: .estimated(50)
             )
           )
         ]
@@ -329,6 +163,8 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
     self.collectionView.backgroundColor = .clear
     self.collectionView.contentInsetAdjustmentBehavior = contentInsetAdjustmentBehavior
  
+    self.addSubview(collectionView)
+    
     collectionView.translatesAutoresizingMaskIntoConstraints = false
     
     NSLayoutConstraint.activate([
@@ -371,7 +207,10 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
     _ cellType: Cell.Type,
     forCellWithReuseIdentifier: String
   ) {
-    collectionView.register(cellType, forCellWithReuseIdentifier: forCellWithReuseIdentifier)
+    collectionView.register(
+      cellType,
+      forCellWithReuseIdentifier: forCellWithReuseIdentifier
+    )
   }
 
   open override func layoutSubviews() {
