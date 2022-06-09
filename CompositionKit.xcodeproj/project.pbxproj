@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B08A46E2851BDC8005E17FB /* Book.DynamicContentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B08A46D2851BDC8005E17FB /* Book.DynamicContentListView.swift */; };
 		4B618C2B277062EF000EA3A4 /* Book.NavigationHostingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B618C2A277062EF000EA3A4 /* Book.NavigationHostingView.swift */; };
 		4B7803C12780455300436AAB /* CompositionKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4B7803C02780455300436AAB /* CompositionKit */; };
 		4B7803C32780458C00436AAB /* Book.VGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7803C22780458C00436AAB /* Book.VGridView.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4B08A46D2851BDC8005E17FB /* Book.DynamicContentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.DynamicContentListView.swift; sourceTree = "<group>"; };
 		4B618C2A277062EF000EA3A4 /* Book.NavigationHostingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.NavigationHostingView.swift; sourceTree = "<group>"; };
 		4B7803C22780458C00436AAB /* Book.VGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.VGridView.swift; sourceTree = "<group>"; };
 		4B959B062764F77E0003FFB6 /* CompositionKit-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CompositionKit-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -82,6 +84,7 @@
 				4BF6ED6127706EE000E39ABC /* UIControl+Closure.swift */,
 				4B959B082764F77E0003FFB6 /* AppDelegate.swift */,
 				4B959B1F2764F8200003FFB6 /* Book.swift */,
+				4B08A46D2851BDC8005E17FB /* Book.DynamicContentListView.swift */,
 				4B618C2A277062EF000EA3A4 /* Book.NavigationHostingView.swift */,
 				4B7803C22780458C00436AAB /* Book.VGridView.swift */,
 				4B959B212764F8300003FFB6 /* RootContainerViewController.swift */,
@@ -198,6 +201,7 @@
 				4B959B092764F77E0003FFB6 /* AppDelegate.swift in Sources */,
 				4B959B222764F8300003FFB6 /* RootContainerViewController.swift in Sources */,
 				4B7803C32780458C00436AAB /* Book.VGridView.swift in Sources */,
+				4B08A46E2851BDC8005E17FB /* Book.DynamicContentListView.swift in Sources */,
 				4B959B202764F8200003FFB6 /* Book.swift in Sources */,
 				4B618C2B277062EF000EA3A4 /* Book.NavigationHostingView.swift in Sources */,
 				4BF6ED6227706EE000E39ABC /* UIControl+Closure.swift in Sources */,
