@@ -9,7 +9,7 @@ open class HostingCell: UICollectionViewCell {
     public var isHighlighted = false
   }
   
-  private class Proxy: ObservableObject {
+  private final class Proxy: ObservableObject {
     @Published var state  = State()
     @Published var content: (State) -> SwiftUI.AnyView? = { _ in nil }
   }
@@ -51,6 +51,8 @@ open class HostingCell: UICollectionViewCell {
     self.hostingController = UIHostingController(
       rootView: RootView(proxy: proxy)
     )
+    
+    // ???: Do we need to create relationship with parent view controller?
     
     contentView.addSubview(hostingController.view)
     hostingController.view.translatesAutoresizingMaskIntoConstraints = false
