@@ -7,7 +7,9 @@ let book = Book(title: "MyBook") {
   if #available(iOS 13, *) {
     Book_VGridView.body
     Book.dynamicContentListView
-  }    
+    Book.hostingView
+    Book.hostingCell
+  }
 
   BookNavigationLink(title: "Demo") {
 //    BookPush(title: "Demo") {

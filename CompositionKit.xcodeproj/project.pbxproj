@@ -19,6 +19,8 @@
 		4B959B1E2764F7B30003FFB6 /* StorybookUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4B959B1D2764F7B30003FFB6 /* StorybookUI */; };
 		4B959B202764F8200003FFB6 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B959B1F2764F8200003FFB6 /* Book.swift */; };
 		4B959B222764F8300003FFB6 /* RootContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B959B212764F8300003FFB6 /* RootContainerViewController.swift */; };
+		4BC61D2628523B3C00354E61 /* Book.HostingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC61D2528523B3C00354E61 /* Book.HostingView.swift */; };
+		4BC61D2828523B4600354E61 /* Book.HostingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC61D2728523B4600354E61 /* Book.HostingCell.swift */; };
 		4BF0DA292770733B007AA8F4 /* MockKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4BF0DA282770733B007AA8F4 /* MockKit */; };
 		4BF0DA2C277073D8007AA8F4 /* Ne in Frameworks */ = {isa = PBXBuildFile; productRef = 4BF0DA2B277073D8007AA8F4 /* Ne */; };
 		4BF6ED602770692600E39ABC /* Wrap in Frameworks */ = {isa = PBXBuildFile; productRef = 4BF6ED5F2770692600E39ABC /* Wrap */; };
@@ -38,6 +40,8 @@
 		4B959B1F2764F8200003FFB6 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		4B959B212764F8300003FFB6 /* RootContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootContainerViewController.swift; sourceTree = "<group>"; };
 		4BBBC6492780450200973154 /*  */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ""; sourceTree = "<group>"; };
+		4BC61D2528523B3C00354E61 /* Book.HostingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.HostingView.swift; sourceTree = "<group>"; };
+		4BC61D2728523B4600354E61 /* Book.HostingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.HostingCell.swift; sourceTree = "<group>"; };
 		4BF59288278D43F6003CC4BA /* Descriptors */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Descriptors; path = submodules/Descriptors; sourceTree = "<group>"; };
 		4BF6ED6127706EE000E39ABC /* UIControl+Closure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Closure.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -85,6 +89,8 @@
 				4B959B082764F77E0003FFB6 /* AppDelegate.swift */,
 				4B959B1F2764F8200003FFB6 /* Book.swift */,
 				4B08A46D2851BDC8005E17FB /* Book.DynamicContentListView.swift */,
+				4BC61D2528523B3C00354E61 /* Book.HostingView.swift */,
+				4BC61D2728523B4600354E61 /* Book.HostingCell.swift */,
 				4B618C2A277062EF000EA3A4 /* Book.NavigationHostingView.swift */,
 				4B7803C22780458C00436AAB /* Book.VGridView.swift */,
 				4B959B212764F8300003FFB6 /* RootContainerViewController.swift */,
@@ -199,9 +205,11 @@
 			files = (
 				4B959B0D2764F77E0003FFB6 /* ViewController.swift in Sources */,
 				4B959B092764F77E0003FFB6 /* AppDelegate.swift in Sources */,
+				4BC61D2628523B3C00354E61 /* Book.HostingView.swift in Sources */,
 				4B959B222764F8300003FFB6 /* RootContainerViewController.swift in Sources */,
 				4B7803C32780458C00436AAB /* Book.VGridView.swift in Sources */,
 				4B08A46E2851BDC8005E17FB /* Book.DynamicContentListView.swift in Sources */,
+				4BC61D2828523B4600354E61 /* Book.HostingCell.swift in Sources */,
 				4B959B202764F8200003FFB6 /* Book.swift in Sources */,
 				4B618C2B277062EF000EA3A4 /* Book.NavigationHostingView.swift in Sources */,
 				4BF6ED6227706EE000E39ABC /* UIControl+Closure.swift in Sources */,
