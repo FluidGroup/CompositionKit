@@ -200,6 +200,7 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
 
     self.collectionView.delegate = _delegateProxy
     self.collectionView.dataSource = dataSource
+    self.collectionView.delaysContentTouches = false
 
   }
   

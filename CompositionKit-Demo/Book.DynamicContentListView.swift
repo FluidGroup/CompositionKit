@@ -172,6 +172,12 @@ extension Book {
   final class Cell: UICollectionViewCell {
 
     private let label = UILabel()
+    
+    override var isHighlighted: Bool {
+      didSet {
+        print(isHighlighted)
+      }
+    }
 
     override init(frame: CGRect) {
       super.init(frame: frame)
