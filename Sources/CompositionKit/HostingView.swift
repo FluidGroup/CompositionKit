@@ -75,6 +75,8 @@ open class HostingView: UIView {
   open override func didMoveToWindow() {
 
     super.didMoveToWindow()
+    
+    // https://muukii.notion.site/Why-we-need-to-add-UIHostingController-to-view-controller-chain-14de20041c99499d803f5a877c9a1dd1
 
     if let _ = window {
       if let parentViewController = self.findNearestViewController() {
