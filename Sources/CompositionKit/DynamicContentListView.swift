@@ -107,13 +107,13 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
       let group = NSCollectionLayoutGroup.vertical(
         layoutSize: NSCollectionLayoutSize(
           widthDimension: .fractionalWidth(1.0),
-          heightDimension: .estimated(50)
+          heightDimension: .estimated(100)
         ),
         subitems: [
           NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
               widthDimension: .fractionalWidth(1.0),
-              heightDimension: .estimated(50)
+              heightDimension: .estimated(100)
             )
           )
         ]

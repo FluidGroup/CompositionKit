@@ -3,16 +3,20 @@ import SwiftUI
 /// Light-weight backported implementation from `UIHostingConfiguration`.
 @available(iOS 13, *)
 open class HostingCell: UICollectionViewCell {
-
+  
   public struct State {
 
     public var isSelected: Bool
     public var isHighlighted: Bool
-
+    
     public init(isSelected: Bool = false, isHighlighted: Bool = false) {
       self.isSelected = isSelected
       self.isHighlighted = isHighlighted
     }
+  }
+  
+  public struct InternalState {
+    public var currentIntrinsicContentSize: CGSize? = nil
   }
 
   private final class Proxy: ObservableObject {
@@ -33,6 +37,26 @@ open class HostingCell: UICollectionViewCell {
   private var hostingController: UIHostingController<RootView>!
 
   private let proxy: Proxy = .init()
+  private var internalState: InternalState = .init()
+  
+  open override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+    hostingController.view.invalidateIntrinsicContentSize()
+    let proposed = super.preferredLayoutAttributesFitting(layoutAttributes)
+    return proposed
+  }
+  
+  open override func layoutSubviews() {
+    super.layoutSubviews()
+    
+    if internalState.currentIntrinsicContentSize != hostingController.view.intrinsicContentSize {
+      
+      if internalState.currentIntrinsicContentSize != nil {
+        invalidateSelfSizing()
+      }
+      
+      internalState.currentIntrinsicContentSize = hostingController.view.intrinsicContentSize
+    }
+  }
 
   public final override var isSelected: Bool {
     didSet {
@@ -44,7 +68,6 @@ open class HostingCell: UICollectionViewCell {
 
   public final override var isHighlighted: Bool {
     didSet {
-      print("isHighlighted, \(isHighlighted)")
       if proxy.state.isHighlighted != isHighlighted {
         proxy.state.isHighlighted = isHighlighted
       }
@@ -105,14 +128,55 @@ open class HostingCell: UICollectionViewCell {
     }
 
   }
-
+  
   public final func setContent<Content: SwiftUI.View>(
     @ViewBuilder content: @escaping (State) -> Content
   ) {
+    
     proxy.content = { state in
-      print(state)
       return SwiftUI.AnyView(content(state))
     }
   }
 
+  public func invalidateSelfSizing() {
+    
+    guard let collectionView = (superview as? UICollectionView) else {
+      return
+    }
+    
+    hostingController.view.invalidateIntrinsicContentSize()
+
+    let context = InvalidationContext(invalidateEverything: true)
+
+    collectionView.collectionViewLayout.invalidateLayout(with: context)
+    collectionView.layoutIfNeeded()
+   
+  }
+  
+  open override func prepareForReuse() {
+    super.prepareForReuse()
+    
+    internalState.currentIntrinsicContentSize = nil
+    proxy.state = .init(isSelected: false, isHighlighted: false)
+    proxy.content = { _ in
+      SwiftUI.AnyView(SwiftUI.EmptyView())
+    }
+    
+  }
+
+}
+
+@available(iOS 13, *)
+extension HostingCell {
+  final class InvalidationContext: UICollectionViewLayoutInvalidationContext {
+    override var invalidateEverything: Bool {
+      return _invalidateEverything
+    }
+    
+    private var _invalidateEverything: Bool
+    
+    init(invalidateEverything: Bool) {
+      self._invalidateEverything = invalidateEverything
+    }
+  }
 }
