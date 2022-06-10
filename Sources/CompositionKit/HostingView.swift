@@ -22,7 +22,7 @@ open class HostingView: UIView {
 
   }
 
-  private var hostingController: UIHostingController<RootView>!
+  private var hostingController: HostingController<RootView>!
 
   private let proxy: Proxy = .init()
 
@@ -41,7 +41,7 @@ open class HostingView: UIView {
 
     super.init(frame: frame)
 
-    self.hostingController = UIHostingController(
+    self.hostingController = HostingController(
       rootView: RootView(proxy: proxy)
     )
 

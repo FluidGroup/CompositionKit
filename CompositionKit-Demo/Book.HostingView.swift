@@ -18,8 +18,42 @@ extension Book {
         }
 
       }
+      
+      BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
+        
+        AnyView { _ in
+          VStackBlock {
+            HostingView { _ in
+              InteractiveView()
+            }
+            HostingView { _ in
+              InteractiveView()
+            }
+            HostingView { _ in
+              InteractiveView()
+            }
+          }
+        }
+                       
+      }
     }
 
   }
 
+}
+
+@available(iOS 13.0, *)
+private struct InteractiveView: View {
+  
+  @State var isOn: Bool = false
+  
+  var body: some View {
+    Button("toggle") {
+      isOn.toggle()
+    }
+    if isOn {
+      Color.gray.frame(height: 30)
+    }
+  }
+  
 }

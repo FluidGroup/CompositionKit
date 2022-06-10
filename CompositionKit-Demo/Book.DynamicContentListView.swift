@@ -27,7 +27,11 @@ extension Book {
           }
         )
 
-        view.setContents([.init(text: BookGenerator.loremIpsum(length: 10))])
+        let items = (0 ..< 100).map { _ in
+          Item(text: BookGenerator.loremIpsum(length: 10))
+        }
+        
+        view.setContents(items)
 
         return view
       }
@@ -152,7 +156,9 @@ extension Book {
   }
 
   final class Cell: UICollectionViewCell {
+    
     private let label = UILabel()
+    private let box = UIView()
     private let button = UIButton(type: .system)
 
     override var isHighlighted: Bool {
@@ -160,7 +166,7 @@ extension Book {
         print(isHighlighted)
       }
     }
-
+    
     override init(frame: CGRect) {
       super.init(frame: frame)
 
@@ -169,17 +175,39 @@ extension Book {
       Mondrian.buildSubviews(on: contentView) {
         VStackBlock(spacing: 8) {
           label
+          box
           button
         }
         .padding(.vertical, 10)
       }
+      
+      let height = box.heightAnchor.constraint(equalToConstant: 0)
+      height.isActive = true
+      
+      var isOn = false
 
-      button.onTap {}
+      button.onTap { [unowned self] in
+        isOn.toggle()
+        
+        if isOn {
+          height.constant = 30
+        } else {
+          height.constant = 0
+        }
+        
+        self.invalidateIntrinsicContentSize()
+      }
     }
 
     @available(*, unavailable)
     required init?(coder _: NSCoder) {
       fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+      let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
+      
+      return attributes
     }
 
     func update(_ item: Item) {

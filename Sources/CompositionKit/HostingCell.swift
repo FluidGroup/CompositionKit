@@ -34,7 +34,7 @@ open class HostingCell: UICollectionViewCell {
 
   }
 
-  private var hostingController: UIHostingController<RootView>!
+  private var hostingController: HostingController<RootView>!
 
   private let proxy: Proxy = .init()
   private var internalState: InternalState = .init()
@@ -51,7 +51,11 @@ open class HostingCell: UICollectionViewCell {
     if internalState.currentIntrinsicContentSize != hostingController.view.intrinsicContentSize {
       
       if internalState.currentIntrinsicContentSize != nil {
-        invalidateSelfSizing()
+        let animator = UIViewPropertyAnimator(duration: 0.5, dampingRatio: 1)
+        animator.addAnimations {
+          self.invalidateSelfSizing()
+        }
+        animator.startAnimation()
       }
       
       internalState.currentIntrinsicContentSize = hostingController.view.intrinsicContentSize
@@ -78,10 +82,22 @@ open class HostingCell: UICollectionViewCell {
 
     super.init(frame: frame)
 
-    self.hostingController = UIHostingController(
+    self.hostingController = HostingController(
       rootView: RootView(proxy: proxy)
     )
+  
+#if swift(>=5.7)
+    if #available(iOS 16.0, *) {
+      self.hostingController.sizingOptions = .intrinsicContentSize
+    }
+#endif
 
+    hostingController.onInvalidated = { [weak self] in
+      guard let self = self else { return }
+      self.contentView.invalidateIntrinsicContentSize()
+      self.invalidateIntrinsicContentSize()
+    }
+    
     contentView.addSubview(hostingController.view)
     hostingController.view.translatesAutoresizingMaskIntoConstraints = false
 

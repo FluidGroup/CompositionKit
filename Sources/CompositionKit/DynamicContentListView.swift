@@ -127,7 +127,7 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
 
       let layout = UICollectionViewCompositionalLayout.init(section: section)
 
-      self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+      self.collectionView = InternalCollectionView(frame: .zero, collectionViewLayout: layout)
 
     case .horizontal:
 
@@ -151,7 +151,7 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
 
       let layout = UICollectionViewCompositionalLayout.init(section: section, configuration: configuration)
 
-      self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+      self.collectionView = InternalCollectionView(frame: .zero, collectionViewLayout: layout)
 
     @unknown default:
       fatalError()
@@ -201,6 +201,12 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
     self.collectionView.delegate = _delegateProxy
     self.collectionView.dataSource = dataSource
     self.collectionView.delaysContentTouches = false
+    
+#if swift(>=5.7)
+    if #available(iOS 16.0, *) {
+      assert(self.collectionView.selfSizingInvalidation == .enabled)
+    }
+#endif
 
   }
   
@@ -261,4 +267,16 @@ private final class _DynamicContentListViewDelegateProxy: NSObject,
     _didSelectItemAt(indexPath)
   }
 
+}
+
+@available(iOS 13, *)
+extension DynamicContentListView {
+  
+  private final class InternalCollectionView: UICollectionView {
+    
+    override func layoutSubviews() {
+      super.layoutSubviews()
+    }
+  }
+  
 }
