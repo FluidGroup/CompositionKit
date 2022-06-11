@@ -201,6 +201,7 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
     self.collectionView.delegate = _delegateProxy
     self.collectionView.dataSource = dataSource
     self.collectionView.delaysContentTouches = false
+    self.collectionView.isPrefetchingEnabled = false
     
 #if swift(>=5.7)
     if #available(iOS 16.0, *) {
@@ -266,7 +267,7 @@ private final class _DynamicContentListViewDelegateProxy: NSObject,
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     _didSelectItemAt(indexPath)
   }
-
+  
 }
 
 @available(iOS 13, *)

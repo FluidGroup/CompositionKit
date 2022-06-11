@@ -15,53 +15,16 @@ open class HostingCell: UICollectionViewCell {
     }
   }
   
-  public struct InternalState {
-    public var currentIntrinsicContentSize: CGSize? = nil
-  }
-
-  private final class Proxy: ObservableObject {
-    @Published var state = State()
-    @Published var content: (State) -> SwiftUI.AnyView? = { _ in nil }
-  }
-
-  private struct RootView: SwiftUI.View {
-
-    @ObservedObject var proxy: Proxy
-
-    var body: some View {
-      proxy.content(proxy.state)
-    }
-
-  }
-
-  private var hostingController: HostingController<RootView>!
-
-  private let proxy: Proxy = .init()
-  private var internalState: InternalState = .init()
+  private var hostingController: HostingController<RootView<State>>!
   
+  private let proxy: Proxy<State> = .init(state: .init())
+    
   open override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
     hostingController.view.invalidateIntrinsicContentSize()
     let proposed = super.preferredLayoutAttributesFitting(layoutAttributes)
     return proposed
   }
   
-  open override func layoutSubviews() {
-    super.layoutSubviews()
-    
-    if internalState.currentIntrinsicContentSize != hostingController.view.intrinsicContentSize {
-      
-      if internalState.currentIntrinsicContentSize != nil {
-        let animator = UIViewPropertyAnimator(duration: 0.5, dampingRatio: 1)
-        animator.addAnimations {
-          self.invalidateSelfSizing()
-        }
-        animator.startAnimation()
-      }
-      
-      internalState.currentIntrinsicContentSize = hostingController.view.intrinsicContentSize
-    }
-  }
-
   public final override var isSelected: Bool {
     didSet {
       if proxy.state.isSelected != isSelected {
@@ -91,12 +54,6 @@ open class HostingCell: UICollectionViewCell {
       self.hostingController.sizingOptions = .intrinsicContentSize
     }
 #endif
-
-    hostingController.onInvalidated = { [weak self] in
-      guard let self = self else { return }
-      self.contentView.invalidateIntrinsicContentSize()
-      self.invalidateIntrinsicContentSize()
-    }
     
     contentView.addSubview(hostingController.view)
     hostingController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -116,6 +73,17 @@ open class HostingCell: UICollectionViewCell {
   }
 
   // MARK: UIView
+  
+  open override func willMove(toSuperview newSuperview: UIView?) {
+    super.willMove(toSuperview: newSuperview)
+    UIView.performWithoutAnimation {
+      contentView.layoutIfNeeded()
+    }
+  }
+  
+  open override func layoutSubviews() {
+    super.layoutSubviews()
+  }
 
   open override func sizeThatFits(_ size: CGSize) -> CGSize {
     hostingController.sizeThatFits(in: size)
@@ -152,6 +120,7 @@ open class HostingCell: UICollectionViewCell {
     proxy.content = { state in
       return SwiftUI.AnyView(content(state))
     }
+
   }
 
   public func invalidateSelfSizing() {
@@ -162,7 +131,13 @@ open class HostingCell: UICollectionViewCell {
     
     hostingController.view.invalidateIntrinsicContentSize()
 
-    let context = InvalidationContext(invalidateEverything: true)
+    let context = InvalidationContext(invalidateEverything: false)
+    
+    guard let indexPath = collectionView.indexPath(for: self) else {
+      return
+    }
+    
+    context.invalidateItems(at: [indexPath])
 
     collectionView.collectionViewLayout.invalidateLayout(with: context)
     collectionView.layoutIfNeeded()
@@ -172,7 +147,6 @@ open class HostingCell: UICollectionViewCell {
   open override func prepareForReuse() {
     super.prepareForReuse()
     
-    internalState.currentIntrinsicContentSize = nil
     proxy.state = .init(isSelected: false, isHighlighted: false)
     proxy.content = { _ in
       SwiftUI.AnyView(SwiftUI.EmptyView())

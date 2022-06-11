@@ -79,14 +79,16 @@ extension Book {
           }
 
           Button("Toggle") {
-            isOn.toggle()
+            withAnimation(.interactiveSpring()) {
+              isOn.toggle()
+            }
           }
         }
       }
       .padding(50)
       .background(Rectangle().border(isOn ? .blue : .gray, width: 8).foregroundColor(.clear))
       .background(Rectangle().border(.pink, width: 30).foregroundColor(.clear))
-      .animation(.interactiveSpring())
+      
     }
   }
 }

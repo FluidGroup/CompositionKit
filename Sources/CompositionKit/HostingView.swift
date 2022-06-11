@@ -1,30 +1,34 @@
 import SwiftUI
 
 @available(iOS 13, *)
+final class Proxy<State>: ObservableObject {
+  @Published var state: State
+  @Published var content: (State) -> SwiftUI.AnyView? = { _ in nil }
+  
+  init(state: State) {
+    self.state = state
+  }
+}
+
+@available(iOS 13, *)
+struct RootView<State>: SwiftUI.View {
+  @ObservedObject var proxy: Proxy<State>
+  
+  var body: some View {
+    proxy.content(proxy.state)
+  }
+}
+
+@available(iOS 13, *)
 open class HostingView: UIView {
 
   public struct State {
 
   }
 
-  private final class Proxy: ObservableObject {
-    @Published var state = State()
-    @Published var content: (State) -> SwiftUI.AnyView? = { _ in nil }
-  }
-
-  private struct RootView: SwiftUI.View {
-
-    @ObservedObject var proxy: Proxy
-
-    var body: some View {
-      proxy.content(proxy.state)
-    }
-
-  }
-
-  private var hostingController: HostingController<RootView>!
-
-  private let proxy: Proxy = .init()
+  private var hostingController: HostingController<RootView<State>>!
+  
+  private let proxy: Proxy<State> = .init(state: .init())
 
   public convenience init() {
     self.init(frame: .zero)
