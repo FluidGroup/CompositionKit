@@ -24,17 +24,8 @@
         "repositoryURL": "https://github.com/muukii/Ne.git",
         "state": {
           "branch": null,
-          "revision": "6555f94596b634c14bd0818265ef8c86bb3005f3",
-          "version": "1.0.1"
-        }
-      },
-      {
-        "package": "RxSwift",
-        "repositoryURL": "https://github.com/ReactiveX/RxSwift.git",
-        "state": {
-          "branch": null,
-          "revision": "7c17a6ccca06b5c107cfa4284e634562ddaf5951",
-          "version": "6.2.0"
+          "revision": "864edeb19072716f2fdc7061bf346aa3fe4d06c6",
+          "version": "1.1.0"
         }
       },
       {
@@ -44,15 +35,6 @@
           "branch": "main",
           "revision": "70289c7cc2c1d05fce7312de6b5ac06d375b2c9e",
           "version": null
-        }
-      },
-      {
-        "package": "Verge",
-        "repositoryURL": "https://github.com/VergeGroup/Verge",
-        "state": {
-          "branch": null,
-          "revision": "14be6e6bf222d3acb9350ab4df2ea87fe33def05",
-          "version": "8.14.0"
         }
       },
       {

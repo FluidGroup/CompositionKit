@@ -1,16 +1,23 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "MondrianLayout",
-        "repositoryURL": "https://github.com/muukii/MondrianLayout.git",
-        "state": {
-          "branch": null,
-          "revision": "ff3e642aeb95ffc6e494474b63403b99cccd6c8c",
-          "version": "0.5.0"
-        }
+  "pins" : [
+    {
+      "identity" : "descriptors",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/muukii/Descriptors.git",
+      "state" : {
+        "revision" : "6b4ae4b9a62bc7950cca9325515264412f37411a",
+        "version" : "0.2.1"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "mondrianlayout",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/muukii/MondrianLayout.git",
+      "state" : {
+        "revision" : "239bc0b02b8abbc211720476d1554b736832bb9c",
+        "version" : "0.9.0"
+      }
+    }
+  ],
+  "version" : 2
 }
