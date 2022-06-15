@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		4B08A46E2851BDC8005E17FB /* Book.DynamicContentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B08A46D2851BDC8005E17FB /* Book.DynamicContentListView.swift */; };
 		4B618C2B277062EF000EA3A4 /* Book.NavigationHostingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B618C2A277062EF000EA3A4 /* Book.NavigationHostingView.swift */; };
-		4B6E75AE2853367D00C3382B /* RevealServer.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B6E75AC2853367500C3382B /* RevealServer.xcframework */; };
-		4B6E75AF2853367D00C3382B /* RevealServer.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4B6E75AC2853367500C3382B /* RevealServer.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4B70998D2856EB7B00BAE257 /* StorybookKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4B70998C2856EB7B00BAE257 /* StorybookKit */; };
 		4B70998F2856EB7B00BAE257 /* StorybookUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4B70998E2856EB7B00BAE257 /* StorybookUI */; };
 		4B7803C12780455300436AAB /* CompositionKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4B7803C02780455300436AAB /* CompositionKit */; };
@@ -23,31 +21,16 @@
 		4B959B222764F8300003FFB6 /* RootContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B959B212764F8300003FFB6 /* RootContainerViewController.swift */; };
 		4BC61D2628523B3C00354E61 /* Book.HostingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC61D2528523B3C00354E61 /* Book.HostingView.swift */; };
 		4BC61D2828523B4600354E61 /* Book.HostingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC61D2728523B4600354E61 /* Book.HostingCell.swift */; };
+		4BEF735D2859BBB100A36665 /* Book.DynamicAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BEF735C2859BBB100A36665 /* Book.DynamicAnimator.swift */; };
 		4BF0DA292770733B007AA8F4 /* MockKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4BF0DA282770733B007AA8F4 /* MockKit */; };
 		4BF0DA2C277073D8007AA8F4 /* Ne in Frameworks */ = {isa = PBXBuildFile; productRef = 4BF0DA2B277073D8007AA8F4 /* Ne */; };
 		4BF6ED602770692600E39ABC /* Wrap in Frameworks */ = {isa = PBXBuildFile; productRef = 4BF6ED5F2770692600E39ABC /* Wrap */; };
 		4BF6ED6227706EE000E39ABC /* UIControl+Closure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF6ED6127706EE000E39ABC /* UIControl+Closure.swift */; };
-		4BFEEB522785E4CC0058FEEA /* CompositionKitVerge in Frameworks */ = {isa = PBXBuildFile; productRef = 4BFEEB512785E4CC0058FEEA /* CompositionKitVerge */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		4B6E75B02853367D00C3382B /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				4B6E75AF2853367D00C3382B /* RevealServer.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4B08A46D2851BDC8005E17FB /* Book.DynamicContentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.DynamicContentListView.swift; sourceTree = "<group>"; };
 		4B618C2A277062EF000EA3A4 /* Book.NavigationHostingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.NavigationHostingView.swift; sourceTree = "<group>"; };
-		4B6E75AC2853367500C3382B /* RevealServer.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = RevealServer.xcframework; sourceTree = "<group>"; };
 		4B7803C22780458C00436AAB /* Book.VGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.VGridView.swift; sourceTree = "<group>"; };
 		4B959B062764F77E0003FFB6 /* CompositionKit-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CompositionKit-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B959B082764F77E0003FFB6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -59,6 +42,8 @@
 		4BBBC6492780450200973154 /*  */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ""; sourceTree = "<group>"; };
 		4BC61D2528523B3C00354E61 /* Book.HostingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.HostingView.swift; sourceTree = "<group>"; };
 		4BC61D2728523B4600354E61 /* Book.HostingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.HostingCell.swift; sourceTree = "<group>"; };
+		4BEF735C2859BBB100A36665 /* Book.DynamicAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.DynamicAnimator.swift; sourceTree = "<group>"; };
+		4BEF73612859BD0600A36665 /* RevealServer.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = RevealServer.xcframework; sourceTree = "<group>"; };
 		4BF59288278D43F6003CC4BA /* Descriptors */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Descriptors; path = submodules/Descriptors; sourceTree = "<group>"; };
 		4BF6ED6127706EE000E39ABC /* UIControl+Closure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Closure.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -71,10 +56,8 @@
 				4BF0DA292770733B007AA8F4 /* MockKit in Frameworks */,
 				4BF0DA2C277073D8007AA8F4 /* Ne in Frameworks */,
 				4BF6ED602770692600E39ABC /* Wrap in Frameworks */,
-				4B6E75AE2853367D00C3382B /* RevealServer.xcframework in Frameworks */,
 				4B7803C12780455300436AAB /* CompositionKit in Frameworks */,
 				4B70998F2856EB7B00BAE257 /* StorybookUI in Frameworks */,
-				4BFEEB522785E4CC0058FEEA /* CompositionKitVerge in Frameworks */,
 				4B70998D2856EB7B00BAE257 /* StorybookKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -85,7 +68,7 @@
 		4B959AEE2764F7180003FFB6 = {
 			isa = PBXGroup;
 			children = (
-				4B6E75AC2853367500C3382B /* RevealServer.xcframework */,
+				4BEF73612859BD0600A36665 /* RevealServer.xcframework */,
 				4BBBC6482780450200973154 /* Packages */,
 				4B959B072764F77E0003FFB6 /* CompositionKit-Demo */,
 				4B959AF92764F7180003FFB6 /* Products */,
@@ -107,6 +90,7 @@
 				4BF6ED6127706EE000E39ABC /* UIControl+Closure.swift */,
 				4B959B082764F77E0003FFB6 /* AppDelegate.swift */,
 				4B959B1F2764F8200003FFB6 /* Book.swift */,
+				4BEF735C2859BBB100A36665 /* Book.DynamicAnimator.swift */,
 				4B08A46D2851BDC8005E17FB /* Book.DynamicContentListView.swift */,
 				4BC61D2528523B3C00354E61 /* Book.HostingView.swift */,
 				4BC61D2728523B4600354E61 /* Book.HostingCell.swift */,
@@ -146,7 +130,6 @@
 				4B959B022764F77E0003FFB6 /* Sources */,
 				4B959B032764F77E0003FFB6 /* Frameworks */,
 				4B959B042764F77E0003FFB6 /* Resources */,
-				4B6E75B02853367D00C3382B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -158,7 +141,6 @@
 				4BF0DA282770733B007AA8F4 /* MockKit */,
 				4BF0DA2B277073D8007AA8F4 /* Ne */,
 				4B7803C02780455300436AAB /* CompositionKit */,
-				4BFEEB512785E4CC0058FEEA /* CompositionKitVerge */,
 				4B70998C2856EB7B00BAE257 /* StorybookKit */,
 				4B70998E2856EB7B00BAE257 /* StorybookUI */,
 			);
@@ -226,6 +208,7 @@
 				4B959B0D2764F77E0003FFB6 /* ViewController.swift in Sources */,
 				4B959B092764F77E0003FFB6 /* AppDelegate.swift in Sources */,
 				4BC61D2628523B3C00354E61 /* Book.HostingView.swift in Sources */,
+				4BEF735D2859BBB100A36665 /* Book.DynamicAnimator.swift in Sources */,
 				4B959B222764F8300003FFB6 /* RootContainerViewController.swift in Sources */,
 				4B7803C32780458C00436AAB /* Book.VGridView.swift in Sources */,
 				4B08A46E2851BDC8005E17FB /* Book.DynamicContentListView.swift in Sources */,
@@ -521,10 +504,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4BF6ED5E2770692600E39ABC /* XCRemoteSwiftPackageReference "Wrap" */;
 			productName = Wrap;
-		};
-		4BFEEB512785E4CC0058FEEA /* CompositionKitVerge */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = CompositionKitVerge;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

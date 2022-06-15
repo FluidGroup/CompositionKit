@@ -10,6 +10,8 @@ let book = Book(title: "MyBook") {
     Book.hostingView
     Book.hostingCell
   }
+  
+  Book.dynamicAnimator
 
   BookNavigationLink(title: "Demo") {
 //    BookPush(title: "Demo") {
