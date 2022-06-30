@@ -22,6 +22,14 @@ open class DynamicSizingCollectionViewCell: UICollectionViewCell {
     guard let collectionView = (superview as? UICollectionView) else {
       return
     }
+    
+    let context = InvalidationContext(invalidateEverything: false)
+    
+    guard let indexPath = collectionView.indexPath(for: self) else {
+      return
+    }
+    
+    context.invalidateItems(at: [indexPath])
 
     if animated {
 
@@ -38,7 +46,7 @@ open class DynamicSizingCollectionViewCell: UICollectionViewCell {
           .overrideInheritedDuration,
         ],
         animations: {
-          collectionView.performBatchUpdates(nil, completion: nil)
+          collectionView.collectionViewLayout.invalidateLayout(with: context)
           collectionView.layoutIfNeeded()
         },
         completion: { (finish) in
@@ -50,13 +58,27 @@ open class DynamicSizingCollectionViewCell: UICollectionViewCell {
 
       CATransaction.begin()
       CATransaction.setDisableActions(true)
-      collectionView.performBatchUpdates(nil, completion: nil)
+      collectionView.collectionViewLayout.invalidateLayout(with: context)
       collectionView.layoutIfNeeded()
       CATransaction.commit()
 
     }
   }
 
+}
+
+extension DynamicSizingCollectionViewCell {
+  final class InvalidationContext: UICollectionViewLayoutInvalidationContext {
+    override var invalidateEverything: Bool {
+      return _invalidateEverything
+    }
+    
+    private var _invalidateEverything: Bool
+    
+    init(invalidateEverything: Bool) {
+      self._invalidateEverything = invalidateEverything
+    }
+  }
 }
 
 /// Preimplemented list view using UICollectionView and UICollectionViewCompositionalLayout.
