@@ -22,6 +22,30 @@ extension Book {
       BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
         
         AnyView { _ in
+          HStackBlock(spacing: 2) {
+            HostingView { _ in
+              InteractiveView()
+            }&>.do {
+              $0.backgroundColor = .lightGray
+            }
+            HostingView { _ in
+              InteractiveView()
+            }&>.do {
+              $0.backgroundColor = .lightGray
+            }
+            HostingView { _ in
+              InteractiveView()
+            }&>.do {
+              $0.backgroundColor = .lightGray
+            }
+          }
+        }
+        
+      }
+      
+      BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
+        
+        AnyView { _ in
           VStackBlock(spacing: 2) {
             HostingView { _ in
               InteractiveView()
@@ -58,7 +82,10 @@ private struct InteractiveView: View {
       isOn.toggle()
     }
     if isOn {
-      Color.gray.frame(height: 30)
+      HStack {
+        Text("Hello")
+        Color.gray.frame(height: 30)
+      }
     }
   }
   

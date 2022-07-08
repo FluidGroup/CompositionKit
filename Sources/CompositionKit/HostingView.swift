@@ -61,9 +61,12 @@ open class HostingView: UIView {
       hostingController.view.leftAnchor.constraint(equalTo: leftAnchor),
     ])
     
-    hostingController.onViewDidLayoutSubviews = { [weak self] controller in
+    hostingController.view.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+    hostingController.view.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+    
+    hostingController.onViewDidLayoutSubviews = { controller in
       // TODO: Reduces number of calling invalidation, it's going to be happen even it's same value.
-      self?.invalidateIntrinsicContentSize()
+      controller.view.invalidateIntrinsicContentSize()
     }
 
   }
