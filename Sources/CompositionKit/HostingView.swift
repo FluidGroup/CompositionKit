@@ -48,6 +48,8 @@ open class HostingView: UIView {
     self.hostingController = HostingController(
       rootView: RootView(proxy: proxy)
     )
+    
+    hostingController.view.backgroundColor = .clear
 
     addSubview(hostingController.view)
     hostingController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -59,6 +61,11 @@ open class HostingView: UIView {
       hostingController.view.leftAnchor.constraint(equalTo: leftAnchor),
     ])
 
+//    let subscription = hostingController.view.observe(\.intrinsicContentSize) { view, change in
+//      print(view)
+//    }
+//
+//    _ = Unmanaged.passRetained(subscription)
   }
 
   @available(*, unavailable)

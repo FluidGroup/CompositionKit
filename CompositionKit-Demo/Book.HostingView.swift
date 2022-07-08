@@ -22,15 +22,21 @@ extension Book {
       BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
         
         AnyView { _ in
-          VStackBlock {
+          VStackBlock(spacing: 2) {
             HostingView { _ in
               InteractiveView()
+            }&>.do {
+              $0.backgroundColor = .lightGray
             }
             HostingView { _ in
               InteractiveView()
+            }&>.do {
+              $0.backgroundColor = .lightGray
             }
             HostingView { _ in
               InteractiveView()
+            }&>.do {
+              $0.backgroundColor = .lightGray
             }
           }
         }
