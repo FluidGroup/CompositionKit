@@ -10,7 +10,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		aqZrQoKkJREYMIZuAk89DawQ/4c=
+		AymsD/z6T2mts7yJ/9v4GzKw7to=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -25,10 +25,6 @@
 	<dict>
 		<key>Headers/RevealServer.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			JavE2LI6bNGfH9W90/bDxwIxVlg=
-			</data>
 			<key>hash2</key>
 			<data>
 			weLK/65HyV1EiL9dd4xoAqQhf0/0r/Oy6os2nXCA+Ew=
@@ -36,10 +32,6 @@
 		</dict>
 		<key>Modules/module.modulemap</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			EuDEeG1dcC1sd+hIW2SkUAImUg8=
-			</data>
 			<key>hash2</key>
 			<data>
 			tstqiJpIPr4iEd3MDHClLuTB/ciSC/zNlke1AjfSVuU=
@@ -47,10 +39,6 @@
 		</dict>
 		<key>Scripts/integrate_revealserver.sh</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			pDjnAHC1xiLNLJDDIIrTACRCcFA=
-			</data>
 			<key>hash2</key>
 			<data>
 			XOjBVOZRN/oNePfbAbXae72e3s7W6HqdKnPKJdHque8=
