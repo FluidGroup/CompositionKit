@@ -66,7 +66,10 @@ open class HostingView: UIView {
     
     hostingController.view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
     hostingController.view.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        
+    
+    setContentHuggingPriority(.defaultHigh, for: .horizontal)
+    setContentHuggingPriority(.defaultHigh, for: .vertical)
+    
     hostingController.onViewDidLayoutSubviews = { controller in
       // TODO: Reduces number of calling invalidation, it's going to be happen even it's same value.
       controller.view.invalidateIntrinsicContentSize()
@@ -83,10 +86,6 @@ open class HostingView: UIView {
 
   open override func sizeThatFits(_ size: CGSize) -> CGSize {
     hostingController.sizeThatFits(in: size)
-  }
-
-  open override var intrinsicContentSize: CGSize {
-    hostingController.view.intrinsicContentSize
   }
 
   open override func didMoveToWindow() {
