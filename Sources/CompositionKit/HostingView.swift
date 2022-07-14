@@ -64,6 +64,9 @@ open class HostingView: UIView {
     hostingController.view.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     hostingController.view.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
     
+    hostingController.view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+    hostingController.view.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        
     hostingController.onViewDidLayoutSubviews = { controller in
       // TODO: Reduces number of calling invalidation, it's going to be happen even it's same value.
       controller.view.invalidateIntrinsicContentSize()
