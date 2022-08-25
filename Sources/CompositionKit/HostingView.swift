@@ -113,7 +113,10 @@ open class HostingView: UIView {
     @ViewBuilder content: @escaping (State) -> Content
   ) {
     proxy.content = { state in
-      SwiftUI.AnyView(content(state))
+      SwiftUI.AnyView(
+        content(state)
+          .edgesIgnoringSafeArea(.all)
+      )
     }
   }
 
