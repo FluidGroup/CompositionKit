@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muukii/Descriptors.git",
       "state" : {
-        "revision" : "6b4ae4b9a62bc7950cca9325515264412f37411a",
-        "version" : "0.2.1"
+        "revision" : "174dbbaff40b455614b62ea3ed16771adde25e65",
+        "version" : "0.2.2"
       }
     },
     {
@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muukii/MondrianLayout.git",
       "state" : {
-        "revision" : "239bc0b02b8abbc211720476d1554b736832bb9c",
-        "version" : "0.9.0"
+        "revision" : "5f00b13984fe08316fc5b5be06e2f41c14a3befa",
+        "version" : "0.10.0"
       }
     }
   ],
