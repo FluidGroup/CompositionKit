@@ -95,7 +95,13 @@ public final class InteractiveView<ContentView: UIView>: UIView {
   public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
 
     super.touchesEnded(touches, with: event)
+
     animationHandler?(false, self, animationTargetViw)
+
+    guard !shouldCancelTouches(touches) else {
+      return
+    }
+
     haptics?.send(event: .onTouchUpInside)
     handlers.onTap()
   }
@@ -104,6 +110,11 @@ public final class InteractiveView<ContentView: UIView>: UIView {
 
     super.touchesMoved(touches, with: event)
 
+    if shouldCancelTouches(touches) {
+      animationHandler?(false, self, animationTargetViw)
+    } else {
+      animationHandler?(true, self, animationTargetViw)
+    }
   }
 
   public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -124,6 +135,15 @@ public final class InteractiveView<ContentView: UIView>: UIView {
 
     haptics?.send(event: .onLongPress)
     handlers.onLongPress(point)
+  }
+
+  private func shouldCancelTouches(_ touches: Set<UITouch>) -> Bool {
+    guard
+      let touch = touches.first,
+      bounds.insetBy(dx: -50, dy: -50).contains(touch.location(in: self)) else {
+      return true
+    }
+    return false
   }
 
 }
