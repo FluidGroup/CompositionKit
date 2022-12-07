@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4B08A46E2851BDC8005E17FB /* Book.DynamicContentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B08A46D2851BDC8005E17FB /* Book.DynamicContentListView.swift */; };
-		4B122EC82878592A00126F5D /* RevealServer.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BEF73612859BD0600A36665 /* RevealServer.xcframework */; };
-		4B122EC92878592A00126F5D /* RevealServer.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4BEF73612859BD0600A36665 /* RevealServer.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4B618C2B277062EF000EA3A4 /* Book.NavigationHostingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B618C2A277062EF000EA3A4 /* Book.NavigationHostingView.swift */; };
 		4B70998D2856EB7B00BAE257 /* StorybookKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4B70998C2856EB7B00BAE257 /* StorybookKit */; };
 		4B70998F2856EB7B00BAE257 /* StorybookUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4B70998E2856EB7B00BAE257 /* StorybookUI */; };
@@ -29,20 +27,6 @@
 		4BF6ED602770692600E39ABC /* Wrap in Frameworks */ = {isa = PBXBuildFile; productRef = 4BF6ED5F2770692600E39ABC /* Wrap */; };
 		4BF6ED6227706EE000E39ABC /* UIControl+Closure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF6ED6127706EE000E39ABC /* UIControl+Closure.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		4B122ECA2878592A00126F5D /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				4B122EC92878592A00126F5D /* RevealServer.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4B08A46D2851BDC8005E17FB /* Book.DynamicContentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.DynamicContentListView.swift; sourceTree = "<group>"; };
@@ -71,7 +55,6 @@
 			files = (
 				4BF0DA292770733B007AA8F4 /* MockKit in Frameworks */,
 				4BF0DA2C277073D8007AA8F4 /* Ne in Frameworks */,
-				4B122EC82878592A00126F5D /* RevealServer.xcframework in Frameworks */,
 				4BF6ED602770692600E39ABC /* Wrap in Frameworks */,
 				4B7803C12780455300436AAB /* CompositionKit in Frameworks */,
 				4B70998F2856EB7B00BAE257 /* StorybookUI in Frameworks */,
@@ -147,7 +130,6 @@
 				4B959B022764F77E0003FFB6 /* Sources */,
 				4B959B032764F77E0003FFB6 /* Frameworks */,
 				4B959B042764F77E0003FFB6 /* Resources */,
-				4B122ECA2878592A00126F5D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
