@@ -29,21 +29,23 @@ open class HostingView: UIView {
   private var hostingController: HostingController<RootView<State>>!
   
   private let proxy: Proxy<State> = .init(state: .init())
+  
+  public let ignoringSafeAreaEdges: Edge.Set
 
-  public convenience init() {
-    self.init(frame: .zero)
-  }
-
-  public convenience init<Content: View>(@ViewBuilder content: @escaping (State) -> Content) {
-    self.init()
+  public convenience init<Content: View>(
+    ignoringSafeAreaEdges: Edge.Set = .all,
+    @ViewBuilder content: @escaping (State) -> Content
+  ) {
+    self.init(ignoringSafeAreaEdges: ignoringSafeAreaEdges)
     setContent(content: content)
   }
 
   // MARK: - Initializers
 
-  public override init(frame: CGRect) {
-
-    super.init(frame: frame)
+  public init(ignoringSafeAreaEdges: Edge.Set = .all) {
+    self.ignoringSafeAreaEdges = ignoringSafeAreaEdges
+    
+    super.init(frame: .null)
 
     self.hostingController = HostingController(
       rootView: RootView(proxy: proxy)
@@ -112,10 +114,10 @@ open class HostingView: UIView {
   public final func setContent<Content: SwiftUI.View>(
     @ViewBuilder content: @escaping (State) -> Content
   ) {
-    proxy.content = { state in
+    proxy.content = { [ignoringSafeAreaEdges] state in
       SwiftUI.AnyView(
         content(state)
-          .edgesIgnoringSafeArea(.all)
+          .edgesIgnoringSafeArea(ignoringSafeAreaEdges)
       )
     }
   }
