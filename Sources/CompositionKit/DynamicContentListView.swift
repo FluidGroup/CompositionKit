@@ -16,21 +16,23 @@ open class DynamicSizingCollectionViewCell: UICollectionViewCell {
   ) {
     fatalError()
   }
+  
+  open override func invalidateIntrinsicContentSize() {
+    if #available(iOS 16, *) {
+      // from iOS 16, auto-resizing runs
+      super.invalidateIntrinsicContentSize()
+    } else {
+      super.invalidateIntrinsicContentSize()
+      self.layoutWithInvalidatingCollectionViewLayout(animated: true)
+    }
+  }
 
   public func layoutWithInvalidatingCollectionViewLayout(animated: Bool) {
 
     guard let collectionView = (superview as? UICollectionView) else {
       return
     }
-    
-    let context = InvalidationContext(invalidateEverything: false)
-    
-    guard let indexPath = collectionView.indexPath(for: self) else {
-      return
-    }
-    
-    context.invalidateItems(at: [indexPath])
-
+        
     if animated {
 
       UIView.animate(
@@ -46,7 +48,7 @@ open class DynamicSizingCollectionViewCell: UICollectionViewCell {
           .overrideInheritedDuration,
         ],
         animations: {
-          collectionView.collectionViewLayout.invalidateLayout(with: context)
+          collectionView.collectionViewLayout.invalidateLayout()
           collectionView.layoutIfNeeded()
         },
         completion: { (finish) in
@@ -58,27 +60,13 @@ open class DynamicSizingCollectionViewCell: UICollectionViewCell {
 
       CATransaction.begin()
       CATransaction.setDisableActions(true)
-      collectionView.collectionViewLayout.invalidateLayout(with: context)
+      collectionView.collectionViewLayout.invalidateLayout()
       collectionView.layoutIfNeeded()
       CATransaction.commit()
 
     }
   }
 
-}
-
-extension DynamicSizingCollectionViewCell {
-  final class InvalidationContext: UICollectionViewLayoutInvalidationContext {
-    override var invalidateEverything: Bool {
-      return _invalidateEverything
-    }
-    
-    private var _invalidateEverything: Bool
-    
-    init(invalidateEverything: Bool) {
-      self._invalidateEverything = invalidateEverything
-    }
-  }
 }
 
 /// Preimplemented list view using UICollectionView and UICollectionViewCompositionalLayout.
@@ -273,8 +261,6 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
 
   open override func layoutSubviews() {
     super.layoutSubviews()
-
-    collectionView.layoutIfNeeded()
   }
 
   public func setUp(
@@ -288,12 +274,12 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
 
   public func setContents(_ contents: [Data], animatedUpdating: Bool = true) {
 
-    var snapshot = NSDiffableDataSourceSnapshot<Section, Data>.init()
-    snapshot.appendSections([.main])
-    snapshot.appendItems(contents, toSection: .main)
+    var newSnapshot = NSDiffableDataSourceSnapshot<Section, Data>.init()
+    newSnapshot.appendSections([.main])
+    newSnapshot.appendItems(contents, toSection: .main)
 
-    dataSource.apply(snapshot, animatingDifferences: animatedUpdating)
-
+    dataSource.apply(newSnapshot, animatingDifferences: animatedUpdating)
+        
   }
 
   public func setContentInset(_ insets: UIEdgeInsets) {

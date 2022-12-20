@@ -181,7 +181,7 @@ extension Book {
     let text: String
   }
 
-  final class Cell: UICollectionViewCell {
+  final class Cell: DynamicSizingCollectionViewCell {
     
     private let label = UILabel()
     private let box = UIView()
