@@ -14,19 +14,19 @@ extension Book {
         view.registerCell(HostingCell.self, forCellWithReuseIdentifier: "HostingCell")
 
         view.setUp(
-          cellForItemAt: { collectionView, item, indexPath in
-
+          cellProvider: .init { context in
+            
             let cell =
-              collectionView.dequeueReusableCell(withReuseIdentifier: "HostingCell", for: indexPath)
-                as! HostingCell
-
+            context.collectionView.dequeueReusableCell(withReuseIdentifier: "HostingCell", for: context.indexPath)
+            as! HostingCell
+            
             cell.setContent { state in
-
-              Book.SwiftUICell(state: state, name: item.text)
+              
+              Book.SwiftUICell(state: state, name: context.data.text)
             }
-
+            
             return cell
-
+            
           },
           didSelectItemAt: { _ in
           }

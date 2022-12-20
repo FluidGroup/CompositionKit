@@ -8,19 +8,43 @@ import UIKit
 extension Book {
   static var dynamicContentListView: BookView {
     BookNavigationLink(title: "DynamicContentListView") {
+      
+      BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
+        
+        let view = DynamicContentListView<DynamicContentListItem<Item>>.init(scrollDirection: .vertical)
+        
+        view.registerCell(Cell.self, forCellWithReuseIdentifier: "Cell")
+        
+        view.setUp(
+          cellProvider: .default(cellForData: { context in
+            let cell = context.collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: context.indexPath) as! Cell
+            cell.update(context.data)
+            return cell
+          }),
+          didSelectItemAt: { _ in
+          }
+        )
+        
+        let items = (0 ..< 100).map { _ in
+          Item(text: BookGenerator.loremIpsum(length: 10))
+        }
+        
+        view.setContents(items.map { .view(DataRepresentingView(item: $0)) })
+        
+        return view
+      }
+      
       BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
         let view = DynamicContentListView<Item>.init(scrollDirection: .vertical)
 
         view.registerCell(Cell.self, forCellWithReuseIdentifier: "Cell")
 
         view.setUp(
-          cellForItemAt: { collectionView, item, indexPath in
-
-            let cell =
-              collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
-                as! Cell
-            cell.update(item)
-
+          cellProvider: .init { context in
+            
+            let cell = context.collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: context.indexPath) as! Cell
+            cell.update(context.data)
+            
             return cell
           },
           didSelectItemAt: { _ in
@@ -87,15 +111,16 @@ extension Book {
           }
 
           view.setUp(
-            cellForItemAt: { collectionView, item, indexPath in
-
-              let cell = collectionView.dequeueConfiguredReusableCell(
+            cellProvider: .init { context in
+              
+              let cell = context.collectionView.dequeueConfiguredReusableCell(
                 using: registration,
-                for: indexPath,
-                item: item
+                for: context.indexPath,
+                item: context.data
               )
+              
               return cell
-
+              
             },
             didSelectItemAt: { _ in
             }
@@ -119,18 +144,19 @@ extension Book {
             view.registerCell(Cell.self, forCellWithReuseIdentifier: "Cell")
 
             view.setUp(
-              cellForItemAt: { collectionView, item, indexPath in
-
+              cellProvider: .init { context in
+                
                 let cell =
-                  collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
-                    as! Cell
-
+                context.collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: context.indexPath)
+                as! Cell
+                
                 cell.contentConfiguration = UIHostingConfiguration {
-                  Book.SwiftUICell(state: .init(isSelected: false, isHighlighted: false), name: item.text)
+                  Book.SwiftUICell(state: .init(isSelected: false, isHighlighted: false), name: context.data.text)
                 }
                 .margins(.all, 0)
-
+                
                 return cell
+                
               },
               didSelectItemAt: { _ in
               }
@@ -214,4 +240,20 @@ extension Book {
       label.text = item.text
     }
   }
+  
+  final class DataRepresentingView: HostingView {
+    
+    init(item: Item) {
+      
+      super.init()
+      
+      setContent { _ in
+        Text(item.text)
+          .padding(20)
+      }
+      
+    }
+    
+  }
+  
 }
