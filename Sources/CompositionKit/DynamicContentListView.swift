@@ -130,16 +130,81 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
   private var _didSelectItemAt: ((Data) -> Void)?
 
   private var dataSource: UICollectionViewDiffableDataSource<Section, Data>!
-
+  
   public init(
+    layout: UICollectionViewCompositionalLayout,
+    contentInsetAdjustmentBehavior: UIScrollView.ContentInsetAdjustmentBehavior = .automatic
+  ) {
+    
+    self.collectionView = .init(frame: .null, collectionViewLayout: layout)
+    
+    super.init(frame: .null)
+    
+    self.backgroundColor = .clear
+    self.collectionView.backgroundColor = .clear
+    self.collectionView.contentInsetAdjustmentBehavior = contentInsetAdjustmentBehavior
+    
+    self.addSubview(collectionView)
+    
+    collectionView.translatesAutoresizingMaskIntoConstraints = false
+    
+    NSLayoutConstraint.activate([
+      collectionView.topAnchor.constraint(equalTo: topAnchor),
+      collectionView.rightAnchor.constraint(equalTo: rightAnchor),
+      collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
+      collectionView.leftAnchor.constraint(equalTo: leftAnchor),
+    ])
+    
+    let dataSource = UICollectionViewDiffableDataSource<Section, Data>(
+      collectionView: collectionView,
+      cellProvider: { [unowned self] collectionView, indexPath, item in
+        guard let provider = self._cellProvider else {
+          assertionFailure("Needs setup before start using.")
+          return UICollectionViewCell(frame: .zero)
+        }
+        let data = item
+        return provider.cell(for: .init(collectionView: collectionView, data: data, indexPath: indexPath))
+      }
+    )
+    
+    self.dataSource = dataSource
+    
+    let _delegateProxy = _DynamicContentListViewDelegateProxy(
+      didSelectItemAt: { [weak self] indexPath in
+        guard let self = self else { return }
+        let item = self.dataSource.itemIdentifier(for: indexPath)!
+        self._didSelectItemAt?(item)
+      }
+    )
+    
+    self._delegateProxy = _delegateProxy
+    
+    self.collectionView.delegate = _delegateProxy
+    self.collectionView.dataSource = dataSource
+    self.collectionView.delaysContentTouches = false
+    self.collectionView.isPrefetchingEnabled = false
+    
+    collectionView.register(DynamicContentListViewContainerCell.self, forCellWithReuseIdentifier: _typeName(DynamicContentListViewContainerCell.self))
+    
+#if swift(>=5.7)
+    if #available(iOS 16.0, *) {
+      assert(self.collectionView.selfSizingInvalidation == .enabled)
+    }
+#endif
+    
+  }
+  
+  public convenience init(
     scrollDirection: UICollectionView.ScrollDirection,
     spacing: CGFloat = 0,
-    contentInsetAdjustmentBehavior: UIScrollView.ContentInsetAdjustmentBehavior = .never
+    contentInsetAdjustmentBehavior: UIScrollView.ContentInsetAdjustmentBehavior = .automatic
   ) {
+    
+    let layout: UICollectionViewCompositionalLayout
 
     switch scrollDirection {
     case .vertical:
-
+      
       let group = NSCollectionLayoutGroup.vertical(
         layoutSize: NSCollectionLayoutSize(
           widthDimension: .fractionalWidth(1.0),
@@ -161,10 +226,8 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
       let configuration = UICollectionViewCompositionalLayoutConfiguration()
       configuration.scrollDirection = scrollDirection
 
-      let layout = UICollectionViewCompositionalLayout.init(section: section)
-
-      self.collectionView = InternalCollectionView(frame: .zero, collectionViewLayout: layout)
-
+      layout = UICollectionViewCompositionalLayout.init(section: section)
+      
     case .horizontal:
 
       let group = NSCollectionLayoutGroup.horizontal(
@@ -185,68 +248,14 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
       let configuration = UICollectionViewCompositionalLayoutConfiguration()
       configuration.scrollDirection = scrollDirection
 
-      let layout = UICollectionViewCompositionalLayout.init(section: section, configuration: configuration)
-
-      self.collectionView = InternalCollectionView(frame: .zero, collectionViewLayout: layout)
+      layout = UICollectionViewCompositionalLayout.init(section: section, configuration: configuration)
 
     @unknown default:
       fatalError()
     }
 
-    super.init(frame: .zero)
-
-    self.backgroundColor = .clear
-    self.collectionView.backgroundColor = .clear
-    self.collectionView.contentInsetAdjustmentBehavior = contentInsetAdjustmentBehavior
- 
-    self.addSubview(collectionView)
+    self.init(layout: layout, contentInsetAdjustmentBehavior: contentInsetAdjustmentBehavior)
     
-    collectionView.translatesAutoresizingMaskIntoConstraints = false
-    
-    NSLayoutConstraint.activate([
-      collectionView.topAnchor.constraint(equalTo: topAnchor),
-      collectionView.rightAnchor.constraint(equalTo: rightAnchor),
-      collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
-      collectionView.leftAnchor.constraint(equalTo: leftAnchor),
-    ])
-
-    let dataSource = UICollectionViewDiffableDataSource<Section, Data>(
-      collectionView: collectionView,
-      cellProvider: { [unowned self] collectionView, indexPath, item in
-        guard let provider = self._cellProvider else {
-          assertionFailure("Needs setup before start using.")
-          return UICollectionViewCell(frame: .zero)
-        }
-        let data = item
-        return provider.cell(for: .init(collectionView: collectionView, data: data, indexPath: indexPath))
-      }
-    )
-
-    self.dataSource = dataSource
-
-    let _delegateProxy = _DynamicContentListViewDelegateProxy(
-      didSelectItemAt: { [weak self] indexPath in
-        guard let self = self else { return }
-        let item = self.dataSource.itemIdentifier(for: indexPath)!
-        self._didSelectItemAt?(item)
-      }
-    )
-
-    self._delegateProxy = _delegateProxy
-
-    self.collectionView.delegate = _delegateProxy
-    self.collectionView.dataSource = dataSource
-    self.collectionView.delaysContentTouches = false
-    self.collectionView.isPrefetchingEnabled = false
-    
-    collectionView.register(DynamicContentListViewContainerCell.self, forCellWithReuseIdentifier: _typeName(DynamicContentListViewContainerCell.self))
-    
-#if swift(>=5.7)
-    if #available(iOS 16.0, *) {
-      assert(self.collectionView.selfSizingInvalidation == .enabled)
-    }
-#endif
-
   }
   
   public func registerCell<Cell: UICollectionViewCell>(
