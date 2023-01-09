@@ -112,11 +112,18 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
 
     fileprivate let contentPool: ContentPool
 
-    public func dequeueViewContainer() -> DynamicContentListViewContainerCell {
+    func dequeueViewContainer() -> DynamicContentListViewContainerCell {
       return collectionView.dequeueReusableCell(
         withReuseIdentifier: _typeName(DynamicContentListViewContainerCell.self),
         for: indexPath
       ) as! DynamicContentListViewContainerCell
+    }
+    
+    public func dequeueReusableCell<Cell: UICollectionViewCell>(_ cellType: Cell.Type) -> Cell {
+      return collectionView.dequeueReusableCell(
+        withReuseIdentifier: _typeName(Cell.self),
+        for: indexPath
+      ) as! Cell
     }
     
     /**
@@ -345,12 +352,11 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
   }
 
   public func registerCell<Cell: UICollectionViewCell>(
-    _ cellType: Cell.Type,
-    forCellWithReuseIdentifier: String
+    _ cellType: Cell.Type
   ) {
     collectionView.register(
       cellType,
-      forCellWithReuseIdentifier: forCellWithReuseIdentifier
+      forCellWithReuseIdentifier: _typeName(Cell.self)
     )
   }
 
@@ -434,33 +440,6 @@ public enum DynamicContentListItem<Data: Hashable & Sendable>: Hashable, Sendabl
     self
   }
 }
-
-//@available(iOS 13, *)
-//extension DynamicContentListView.CellProvider where Data: DynamicContentListItemType {
-//
-//  public nonisolated static func `default`(
-//    cellForData: @escaping @MainActor (DynamicContentListView<Data.Data>.CellProviderContext) ->
-//      UICollectionViewCell
-//  ) -> Self {
-//    .init { context in
-//      switch context.data.restore() {
-//      case .data(let data):
-//        return cellForData(
-//          .init(
-//            collectionView: context.collectionView,
-//            data: data,
-//            indexPath: context.indexPath,
-//            contentPool: context.contentPool
-//          )
-//        )
-//      case .view(let view):
-//        let cell = context.dequeueViewContainer()
-//        cell.set(content: view)
-//        return cell
-//      }
-//    }
-//  }
-//}
 
 public final class DynamicContentListViewContainerCell: UICollectionViewCell {
 

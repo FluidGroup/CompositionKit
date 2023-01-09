@@ -14,7 +14,7 @@ extension Book {
         
         let view = DynamicContentListView<DynamicContentListItem<Item>>.init(scrollDirection: .vertical)
         
-        view.registerCell(Cell.self, forCellWithReuseIdentifier: "Cell")
+        view.registerCell(Cell.self)
         
         view.setUp(
           cellProvider: .init { context in
@@ -55,12 +55,12 @@ extension Book {
       BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
         let view = DynamicContentListView<Item>.init(scrollDirection: .vertical)
 
-        view.registerCell(Cell.self, forCellWithReuseIdentifier: "Cell")
+        view.registerCell(Cell.self)
 
         view.setUp(
           cellProvider: .init { context in
             
-            let cell = context.collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: context.indexPath) as! Cell
+            let cell = context.dequeueReusableCell(Cell.self)
             cell.update(context.data)
             
             return cell
@@ -162,14 +162,12 @@ extension Book {
           BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
             let view = DynamicContentListView<Item>.init(scrollDirection: .vertical)
 
-            view.registerCell(Cell.self, forCellWithReuseIdentifier: "Cell")
+            view.registerCell(Cell.self)
 
             view.setUp(
               cellProvider: .init { context in
                 
-                let cell =
-                context.collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: context.indexPath)
-                as! Cell
+                let cell = context.dequeueReusableCell(Cell.self)
                 
                 cell.contentConfiguration = UIHostingConfiguration {
                   Book.SwiftUICell(state: .init(isSelected: false, isHighlighted: false), name: context.data.text)
@@ -271,8 +269,13 @@ extension Book {
       super.init()
       
       setContent { _ in
-        Text(item.text)
-          .padding(20)
+        HStack {
+          Text(item.text)
+          Button("Tap") {
+            
+          }
+        }
+        .padding(20)
       }
       
     }

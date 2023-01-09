@@ -12,14 +12,12 @@ extension Book {
       BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
         let view = DynamicContentListView<Item>.init(scrollDirection: .vertical)
 
-        view.registerCell(HostingCell.self, forCellWithReuseIdentifier: "HostingCell")
+        view.registerCell(HostingCell.self)
 
         view.setUp(
           cellProvider: .init { context in
             
-            let cell =
-            context.collectionView.dequeueReusableCell(withReuseIdentifier: "HostingCell", for: context.indexPath)
-            as! HostingCell
+            let cell = context.dequeueReusableCell(HostingCell.self)
             
             cell.setContent { state in
               
