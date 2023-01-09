@@ -5,6 +5,7 @@ import SwiftUI
 import UIKit
 
 @available(iOS 13, *)
+@MainActor
 extension Book {
 
   static var hostingView: some BookView {

@@ -5,35 +5,53 @@ import SwiftUI
 import UIKit
 
 @available(iOS 13, *)
+@MainActor
 extension Book {
   static var dynamicContentListView: BookView {
     BookNavigationLink(title: "DynamicContentListView") {
       
-      BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
+      BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) { () -> DynamicContentListView<DynamicContentListItem<Book.Item>> in
         
         let view = DynamicContentListView<DynamicContentListItem<Item>>.init(scrollDirection: .vertical)
         
         view.registerCell(Cell.self, forCellWithReuseIdentifier: "Cell")
         
         view.setUp(
-          cellProvider: .default(cellForData: { context in
-            let cell = context.collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: context.indexPath) as! Cell
-            cell.update(context.data)
-            return cell
-          }),
+          cellProvider: .init { context in
+           
+            switch context.data {
+            case .data(let data):
+              
+              return context.containerCell {
+                DataRepresentingView(item: data)
+              }
+              
+            case .view(let view):
+              return context.containerCell(content: view)
+            }
+            
+          },
           didSelectItemAt: { _ in
           }
         )
         
         let items = (0 ..< 100).map { _ in
-          Item(text: BookGenerator.loremIpsum(length: 10))
+          Item(text: BookGenerator.randomEmoji())
         }
         
-        view.setContents(items.map { .view(DataRepresentingView(item: $0)) })
+        view.setContents(items.map { .data($0) })
         
         return view
       }
-      
+      .addButton("Update content") { view in
+        
+        let items = (0 ..< 100).map { _ in
+          Item(text: BookGenerator.randomEmoji())
+        }
+        
+        view.setContents(items.map { .data($0) })
+      }
+            
       BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
         let view = DynamicContentListView<Item>.init(scrollDirection: .vertical)
 
@@ -64,7 +82,9 @@ extension Book {
 
       if #available(iOS 14, *) {
         BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
+          @MainActor
           class MyConfiguration: UIContentConfiguration {
+            @MainActor
             class MyContentView: UIView, UIContentView {
               let label = UILabel()
 
@@ -90,6 +110,7 @@ extension Book {
               }
             }
 
+            @MainActor
             func makeContentView() -> UIView & UIContentView {
               print("Make")
               return MyContentView()
@@ -244,6 +265,8 @@ extension Book {
   final class DataRepresentingView: HostingView {
     
     init(item: Item) {
+      
+      print("Init, \(item)")
       
       super.init()
       

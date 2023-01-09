@@ -3,6 +3,7 @@ import UIKit
 import SwiftUI
 import MondrianLayout
 
+@MainActor
 public enum Book_NavigationHostingView {
 
   static var body: BookView {

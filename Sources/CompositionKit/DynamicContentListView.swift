@@ -16,7 +16,7 @@ open class DynamicSizingCollectionViewCell: UICollectionViewCell {
   ) {
     fatalError()
   }
-  
+
   open override func invalidateIntrinsicContentSize() {
     if #available(iOS 16, *) {
       // from iOS 16, auto-resizing runs
@@ -32,7 +32,7 @@ open class DynamicSizingCollectionViewCell: UICollectionViewCell {
     guard let collectionView = (superview as? UICollectionView) else {
       return
     }
-        
+
     if animated {
 
       UIView.animate(
@@ -77,31 +77,86 @@ open class DynamicSizingCollectionViewCell: UICollectionViewCell {
 /// - TODO: Currently supported only vertical scrolling.
 @available(iOS 13, *)
 open class DynamicContentListView<Data: Hashable>: CodeBasedView {
-  
+
+  @MainActor
+  fileprivate final class ContentPool {
+
+    private var contents: [Data: UIView] = [:]
+
+    func set(content: UIView, for data: Data) {
+      contents[data] = content
+    }
+
+    func get(for data: Data) -> UIView? {
+      contents[data]
+    }
+
+    func sweep(items: [Data]) {
+
+      let unusedKeys = Set(contents.keys).subtracting(items)
+
+      for key in unusedKeys {
+        contents.removeValue(forKey: key)
+      }
+
+    }
+
+  }
+
   @MainActor
   public struct CellProviderContext {
+
     public unowned let collectionView: UICollectionView
     public let data: Data
     public let indexPath: IndexPath
-    
+
+    fileprivate let contentPool: ContentPool
+
     public func dequeueViewContainer() -> DynamicContentListViewContainerCell {
-      return collectionView.dequeueReusableCell(withReuseIdentifier: _typeName(DynamicContentListViewContainerCell.self), for: indexPath) as! DynamicContentListViewContainerCell
+      return collectionView.dequeueReusableCell(
+        withReuseIdentifier: _typeName(DynamicContentListViewContainerCell.self),
+        for: indexPath
+      ) as! DynamicContentListViewContainerCell
+    }
+    
+    /**
+     Returns a cell that displays given content isolated from recycling system of collection view.
+     */
+    public func containerCell(content: UIView) -> UICollectionViewCell {
+      let cell = dequeueViewContainer()
+      cell.set(content: content)
+      return cell
+    }
+    
+    /**
+     Returns a cell that displays a created content from given block isolated from recycling system of collection view.
+     That created view will be retained. Next time cell provider closure would not be called.
+     */
+    public func containerCell(contentBlock: () -> UIView) -> UICollectionViewCell {
+
+      let cell = dequeueViewContainer()
+      let contentView = contentBlock()
+      contentPool.set(content: contentView, for: data)
+      cell.set(content: contentView)
+      return cell
     }
   }
-  
+
   @MainActor
   public struct CellProvider {
-    
+
     private var thunk: @MainActor (CellProviderContext) -> UICollectionViewCell
-    
-    public nonisolated init(_ thunk: @escaping @MainActor (CellProviderContext) -> UICollectionViewCell) {
+
+    public nonisolated init(
+      _ thunk: @escaping @MainActor (CellProviderContext) -> UICollectionViewCell
+    ) {
       self.thunk = thunk
     }
-    
+
     func cell(for context: CellProviderContext) -> UICollectionViewCell {
       thunk(context)
     }
-    
+
   }
 
   @available(iOS 14, *)
@@ -130,45 +185,70 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
   private var _didSelectItemAt: ((Data) -> Void)?
 
   private var dataSource: UICollectionViewDiffableDataSource<Section, Data>!
-  
+
+  private let contentPool = ContentPool()
+
   public init(
     layout: UICollectionViewCompositionalLayout,
     contentInsetAdjustmentBehavior: UIScrollView.ContentInsetAdjustmentBehavior = .automatic
   ) {
-    
+
     self.collectionView = .init(frame: .null, collectionViewLayout: layout)
-    
+
     super.init(frame: .null)
-    
+
     self.backgroundColor = .clear
     self.collectionView.backgroundColor = .clear
     self.collectionView.contentInsetAdjustmentBehavior = contentInsetAdjustmentBehavior
-    
+
     self.addSubview(collectionView)
-    
+
     collectionView.translatesAutoresizingMaskIntoConstraints = false
-    
+
     NSLayoutConstraint.activate([
       collectionView.topAnchor.constraint(equalTo: topAnchor),
       collectionView.rightAnchor.constraint(equalTo: rightAnchor),
       collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
       collectionView.leftAnchor.constraint(equalTo: leftAnchor),
     ])
-    
+
     let dataSource = UICollectionViewDiffableDataSource<Section, Data>(
       collectionView: collectionView,
       cellProvider: { [unowned self] collectionView, indexPath, item in
+        
         guard let provider = self._cellProvider else {
           assertionFailure("Needs setup before start using.")
           return UICollectionViewCell(frame: .zero)
         }
+        
         let data = item
-        return provider.cell(for: .init(collectionView: collectionView, data: data, indexPath: indexPath))
+        
+        let context = CellProviderContext.init(
+          collectionView: collectionView,
+          data: data,
+          indexPath: indexPath,
+          contentPool: contentPool
+        )
+        
+        if let content = contentPool.get(for: data) {
+          
+          let container = context.dequeueViewContainer()
+          container.set(content: content)
+          return container
+          
+        } else {
+          
+          return provider.cell(
+            for: context
+          )
+          
+        }
+        
       }
     )
-    
+
     self.dataSource = dataSource
-    
+
     let _delegateProxy = _DynamicContentListViewDelegateProxy(
       didSelectItemAt: { [weak self] indexPath in
         guard let self = self else { return }
@@ -176,35 +256,38 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
         self._didSelectItemAt?(item)
       }
     )
-    
+
     self._delegateProxy = _delegateProxy
-    
+
     self.collectionView.delegate = _delegateProxy
     self.collectionView.dataSource = dataSource
     self.collectionView.delaysContentTouches = false
     self.collectionView.isPrefetchingEnabled = false
-    
-    collectionView.register(DynamicContentListViewContainerCell.self, forCellWithReuseIdentifier: _typeName(DynamicContentListViewContainerCell.self))
-    
-#if swift(>=5.7)
+
+    collectionView.register(
+      DynamicContentListViewContainerCell.self,
+      forCellWithReuseIdentifier: _typeName(DynamicContentListViewContainerCell.self)
+    )
+
+    #if swift(>=5.7)
     if #available(iOS 16.0, *) {
       assert(self.collectionView.selfSizingInvalidation == .enabled)
     }
-#endif
-    
+    #endif
+
   }
-  
+
   public convenience init(
     scrollDirection: UICollectionView.ScrollDirection,
     spacing: CGFloat = 0,
     contentInsetAdjustmentBehavior: UIScrollView.ContentInsetAdjustmentBehavior = .automatic
   ) {
-    
+
     let layout: UICollectionViewCompositionalLayout
 
     switch scrollDirection {
     case .vertical:
-      
+
       let group = NSCollectionLayoutGroup.vertical(
         layoutSize: NSCollectionLayoutSize(
           widthDimension: .fractionalWidth(1.0),
@@ -222,12 +305,12 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
 
       let section = NSCollectionLayoutSection(group: group)
       section.interGroupSpacing = spacing
-      
+
       let configuration = UICollectionViewCompositionalLayoutConfiguration()
       configuration.scrollDirection = scrollDirection
 
       layout = UICollectionViewCompositionalLayout.init(section: section)
-      
+
     case .horizontal:
 
       let group = NSCollectionLayoutGroup.horizontal(
@@ -248,16 +331,19 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
       let configuration = UICollectionViewCompositionalLayoutConfiguration()
       configuration.scrollDirection = scrollDirection
 
-      layout = UICollectionViewCompositionalLayout.init(section: section, configuration: configuration)
+      layout = UICollectionViewCompositionalLayout.init(
+        section: section,
+        configuration: configuration
+      )
 
     @unknown default:
       fatalError()
     }
 
     self.init(layout: layout, contentInsetAdjustmentBehavior: contentInsetAdjustmentBehavior)
-    
+
   }
-  
+
   public func registerCell<Cell: UICollectionViewCell>(
     _ cellType: Cell.Type,
     forCellWithReuseIdentifier: String
@@ -288,7 +374,9 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
     newSnapshot.appendItems(contents, toSection: .main)
 
     dataSource.apply(newSnapshot, animatingDifferences: animatedUpdating)
-        
+
+    contentPool.sweep(items: contents)
+
   }
 
   public func setContentInset(_ insets: UIEdgeInsets) {
@@ -312,85 +400,97 @@ private final class _DynamicContentListViewDelegateProxy: NSObject,
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     _didSelectItemAt(indexPath)
   }
-  
+
 }
 
 @available(iOS 13, *)
 extension DynamicContentListView {
-  
+
   private final class InternalCollectionView: UICollectionView {
-    
+
     override func layoutSubviews() {
       super.layoutSubviews()
     }
   }
-  
+
 }
 
 public protocol DynamicContentListItemType {
-  
+
   associatedtype Data: Hashable & Sendable
 
   @_spi(restore)
   func restore() -> DynamicContentListItem<Data>
-  
+
 }
 
-public enum DynamicContentListItem<Data: Hashable & Sendable>: Hashable, Sendable, DynamicContentListItemType {
+public enum DynamicContentListItem<Data: Hashable & Sendable>: Hashable, Sendable,
+  DynamicContentListItemType
+{
   case data(Data)
   case view(UIView)
-  
+
   public func restore() -> DynamicContentListItem<Data> {
     self
   }
 }
 
-@available(iOS 13, *)
-extension DynamicContentListView.CellProvider where Data : DynamicContentListItemType {
-    
-  public nonisolated static func `default`(cellForData: @escaping @MainActor (DynamicContentListView<Data.Data>.CellProviderContext) -> UICollectionViewCell) -> Self {
-    .init { context in
-      switch context.data.restore() {
-      case .data(let data):
-        return cellForData(.init(collectionView: context.collectionView, data: data, indexPath: context.indexPath))
-      case .view(let view):
-        let cell = context.dequeueViewContainer()
-        cell.set(content: view)
-        return cell
-      }
-    }
-  }
-}
+//@available(iOS 13, *)
+//extension DynamicContentListView.CellProvider where Data: DynamicContentListItemType {
+//
+//  public nonisolated static func `default`(
+//    cellForData: @escaping @MainActor (DynamicContentListView<Data.Data>.CellProviderContext) ->
+//      UICollectionViewCell
+//  ) -> Self {
+//    .init { context in
+//      switch context.data.restore() {
+//      case .data(let data):
+//        return cellForData(
+//          .init(
+//            collectionView: context.collectionView,
+//            data: data,
+//            indexPath: context.indexPath,
+//            contentPool: context.contentPool
+//          )
+//        )
+//      case .view(let view):
+//        let cell = context.dequeueViewContainer()
+//        cell.set(content: view)
+//        return cell
+//      }
+//    }
+//  }
+//}
 
 public final class DynamicContentListViewContainerCell: UICollectionViewCell {
-  
+
   private var _contentView: UIView?
-  
+
   public override init(frame: CGRect) {
     super.init(frame: frame)
   }
-  
+
   @available(*, unavailable)
   public required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
+
   public func set(content: UIView) {
-    
+
     _contentView?.removeFromSuperview()
-    
+
     contentView.addSubview(content)
     content.translatesAutoresizingMaskIntoConstraints = false
-    
+
     NSLayoutConstraint.activate([
       content.topAnchor.constraint(equalTo: contentView.topAnchor),
       content.rightAnchor.constraint(equalTo: contentView.rightAnchor),
       content.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
       content.leftAnchor.constraint(equalTo: contentView.leftAnchor),
     ])
-    
+
     self._contentView = content
-    
+
   }
-  
+
 }

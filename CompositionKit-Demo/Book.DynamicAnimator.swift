@@ -2,6 +2,7 @@
 import StorybookKit
 import UIKit
 
+@MainActor
 extension Book {
   
   static var dynamicAnimator: BookView {
