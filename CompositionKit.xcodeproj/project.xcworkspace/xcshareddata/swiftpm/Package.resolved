@@ -2,6 +2,24 @@
   "object": {
     "pins": [
       {
+        "package": "IGListKit",
+        "repositoryURL": "https://github.com/3a4oT/IGListKit",
+        "state": {
+          "branch": "spmNumber10",
+          "revision": "979eca9b2da15e35af36f4613452dd6e07641969",
+          "version": null
+        }
+      },
+      {
+        "package": "libwebp",
+        "repositoryURL": "https://github.com/SDWebImage/libwebp-Xcode",
+        "state": {
+          "branch": null,
+          "revision": "4f52fc9b29600a03de6e05af16df0d694cb44301",
+          "version": "1.2.4"
+        }
+      },
+      {
         "package": "MockKit",
         "repositoryURL": "https://github.com/muukii/MockKit.git",
         "state": {
@@ -29,11 +47,65 @@
         }
       },
       {
+        "package": "PINCache",
+        "repositoryURL": "https://github.com/pinterest/PINCache.git",
+        "state": {
+          "branch": null,
+          "revision": "875c654984fb52b47ca65ae70d24852b0003ccd9",
+          "version": "3.0.3"
+        }
+      },
+      {
+        "package": "PINOperation",
+        "repositoryURL": "https://github.com/pinterest/PINOperation.git",
+        "state": {
+          "branch": null,
+          "revision": "40504c156a68b20f98f7ddc73a115cbb7893be25",
+          "version": "1.2.2"
+        }
+      },
+      {
+        "package": "PINRemoteImage",
+        "repositoryURL": "https://github.com/pinterest/PINRemoteImage.git",
+        "state": {
+          "branch": "master",
+          "revision": "18637e4414d77fbc95cd7d499179a9880e9a78d8",
+          "version": null
+        }
+      },
+      {
         "package": "Storybook",
         "repositoryURL": "https://github.com/eure/Storybook-ios",
         "state": {
           "branch": "main",
-          "revision": "16fb37bd55cb2f514f6836e115e3e2773b7953c6",
+          "revision": "c47c89ae27214b448eb3cfaf443f52a677dbee2e",
+          "version": null
+        }
+      },
+      {
+        "package": "Texture",
+        "repositoryURL": "https://github.com/FluidGroup/Texture.git",
+        "state": {
+          "branch": "spm",
+          "revision": "0783e80711095fd1bf9559a9c4a66078eec22563",
+          "version": null
+        }
+      },
+      {
+        "package": "TextureBridging",
+        "repositoryURL": "https://github.com/FluidGroup/TextureBridging.git",
+        "state": {
+          "branch": "main",
+          "revision": "ed8d3ac84c3fda90832c793fdeb8972154bd15fe",
+          "version": null
+        }
+      },
+      {
+        "package": "TextureSwiftSupport",
+        "repositoryURL": "https://github.com/FluidGroup/TextureSwiftSupport.git",
+        "state": {
+          "branch": "main",
+          "revision": "7ee42c7732034e943b8e157c829de9c3c10db130",
           "version": null
         }
       },

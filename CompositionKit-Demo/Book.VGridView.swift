@@ -5,6 +5,7 @@ import SwiftUI
 import UIKit
 
 @available(iOS 13, *)
+@MainActor
 public enum Book_VGridView {
 
   static var body: BookView {
