@@ -2,72 +2,9 @@ import Foundation
 import MondrianLayout
 import UIKit
 
-open class DynamicSizingCollectionViewCell: UICollectionViewCell {
-
-  public override init(
-    frame: CGRect
-  ) {
-    super.init(frame: frame)
-  }
-
-  @available(*, unavailable)
-  public required init?(
-    coder: NSCoder
-  ) {
-    fatalError()
-  }
-
-  open override func invalidateIntrinsicContentSize() {
-    if #available(iOS 16, *) {
-      // from iOS 16, auto-resizing runs
-      super.invalidateIntrinsicContentSize()
-    } else {
-      super.invalidateIntrinsicContentSize()
-      self.layoutWithInvalidatingCollectionViewLayout(animated: true)
-    }
-  }
-
-  public func layoutWithInvalidatingCollectionViewLayout(animated: Bool) {
-
-    guard let collectionView = (superview as? UICollectionView) else {
-      return
-    }
-
-    if animated {
-
-      UIView.animate(
-        withDuration: 0.5,
-        delay: 0,
-        usingSpringWithDamping: 1,
-        initialSpringVelocity: 0,
-        options: [
-          .beginFromCurrentState,
-          .allowUserInteraction,
-          .overrideInheritedCurve,
-          .overrideInheritedOptions,
-          .overrideInheritedDuration,
-        ],
-        animations: {
-          collectionView.collectionViewLayout.invalidateLayout()
-          collectionView.layoutIfNeeded()
-        },
-        completion: { (finish) in
-
-        }
-      )
-
-    } else {
-
-      CATransaction.begin()
-      CATransaction.setDisableActions(true)
-      collectionView.collectionViewLayout.invalidateLayout()
-      collectionView.layoutIfNeeded()
-      CATransaction.commit()
-
-    }
-  }
-
-}
+@available(iOS 13, *)
+@available(*, deprecated, renamed: "DynamicCompositionalLayoutView")
+public typealias DynamicContentListView<Section: Hashable, Data: Hashable> = DynamicCompositionalLayoutView<Section, Data>
 
 /// Preimplemented list view using UICollectionView and UICollectionViewCompositionalLayout.
 /// - Supports dynamic content update
@@ -76,7 +13,7 @@ open class DynamicSizingCollectionViewCell: UICollectionViewCell {
 ///
 /// - TODO: Currently supported only vertical scrolling.
 @available(iOS 13, *)
-open class DynamicContentListView<Data: Hashable>: CodeBasedView {
+open class DynamicCompositionalLayoutView<Section: Hashable, Data: Hashable>: CodeBasedView, UICollectionViewDelegate {
 
   @MainActor
   fileprivate final class ContentPool {
@@ -84,6 +21,11 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
     private var contents: [Data: UIView] = [:]
 
     func set(content: UIView, for data: Data) {
+      #if DEBUG
+      if contents[data] != nil {
+        Log.error(.dynamicCompositionalLayoutView, "Content has been already created")
+      }
+      #endif
       contents[data] = content
     }
 
@@ -98,7 +40,15 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
       for key in unusedKeys {
         contents.removeValue(forKey: key)
       }
-
+      
+      #if DEBUG
+      
+      let hasUnmountedView = contents.values.contains(where: { $0.superview == nil })
+      if hasUnmountedView {
+        Log.error(.dynamicCompositionalLayoutView, "There are views that are not displayed")
+      }
+      
+      #endif
     }
 
   }
@@ -113,10 +63,8 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
     fileprivate let contentPool: ContentPool
 
     func dequeueViewContainer() -> DynamicContentListViewContainerCell {
-      return collectionView.dequeueReusableCell(
-        withReuseIdentifier: _typeName(DynamicContentListViewContainerCell.self),
-        for: indexPath
-      ) as! DynamicContentListViewContainerCell
+      print(indexPath)
+      return dequeueReusableCell(DynamicContentListViewContainerCell.self)
     }
     
     public func dequeueReusableCell<Cell: UICollectionViewCell>(_ cellType: Cell.Type) -> Cell {
@@ -125,7 +73,7 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
         for: indexPath
       ) as! Cell
     }
-    
+        
     /**
      Returns a cell that displays given content isolated from recycling system of collection view.
      */
@@ -161,7 +109,12 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
     }
 
     func cell(for context: CellProviderContext) -> UICollectionViewCell {
-      thunk(context)
+      
+      if let content = context.contentPool.get(for: context.data) {
+        return context.containerCell(content: content)
+      }
+      
+      return thunk(context)
     }
 
   }
@@ -170,10 +123,6 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
   public typealias CellRegistration<Cell: UICollectionViewCell> = UICollectionView.CellRegistration<
     Cell, Data
   >
-
-  private enum Section: Hashable {
-    case main
-  }
 
   public var scrollView: UIScrollView {
     collectionView
@@ -184,8 +133,6 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
   public var layout: UICollectionViewCompositionalLayout {
     collectionView.collectionViewLayout as! UICollectionViewCompositionalLayout
   }
-
-  private var _delegateProxy: _DynamicContentListViewDelegateProxy?
 
   private var _cellProvider: CellProvider?
 
@@ -237,39 +184,20 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
           contentPool: contentPool
         )
         
-        if let content = contentPool.get(for: data) {
-          
-          let container = context.dequeueViewContainer()
-          container.set(content: content)
-          return container
-          
-        } else {
-          
-          return provider.cell(
-            for: context
-          )
-          
-        }
-        
+        return provider.cell(
+          for: context
+        )
+                
       }
     )
 
     self.dataSource = dataSource
 
-    let _delegateProxy = _DynamicContentListViewDelegateProxy(
-      didSelectItemAt: { [weak self] indexPath in
-        guard let self = self else { return }
-        let item = self.dataSource.itemIdentifier(for: indexPath)!
-        self._didSelectItemAt?(item)
-      }
-    )
-
-    self._delegateProxy = _delegateProxy
-
-    self.collectionView.delegate = _delegateProxy
+    self.collectionView.delegate = self
     self.collectionView.dataSource = dataSource
     self.collectionView.delaysContentTouches = false
     self.collectionView.isPrefetchingEnabled = false
+    self.collectionView.prefetchDataSource = nil
 
     collectionView.register(
       DynamicContentListViewContainerCell.self,
@@ -359,11 +287,7 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
       forCellWithReuseIdentifier: _typeName(Cell.self)
     )
   }
-
-  open override func layoutSubviews() {
-    super.layoutSubviews()
-  }
-
+  
   public func setUp(
     cellProvider: CellProvider,
     didSelectItemAt: @escaping (Data) -> Void
@@ -372,45 +296,75 @@ open class DynamicContentListView<Data: Hashable>: CodeBasedView {
     _didSelectItemAt = didSelectItemAt
     _cellProvider = cellProvider
   }
-
-  public func setContents(_ contents: [Data], animatedUpdating: Bool = true) {
+  
+  public func setContents(snapshot: NSDiffableDataSourceSnapshot<Section, Data>, animatedUpdating: Bool = true) {
+    
+    dataSource.apply(snapshot, animatingDifferences: animatedUpdating)
+    
+    if #available(iOS 15, *) {
+      
+    } else if #available(iOS 14, *) {
+      // iOS 14
+      
+      // sometimes cell's content will be gone.
+      collectionView.reloadData()
+    } else {
+      // workaround: iOS13 sometimes fails to update layout
+      Task { @MainActor in
+        collectionView.layoutIfNeeded()
+      }
+    }
+    
+    contentPool.sweep(items: snapshot.itemIdentifiers)
+    
+  }
+  
+  /**
+   Displays cells with given contents.
+   CollectionView will update its cells partially using DiffableDataSources.
+   */
+  public func setContents(_ contents: [Data], animatedUpdating: Bool = true) where Section == DynamicCompositionalLayoutSingleSection {
 
     var newSnapshot = NSDiffableDataSourceSnapshot<Section, Data>.init()
     newSnapshot.appendSections([.main])
     newSnapshot.appendItems(contents, toSection: .main)
 
-    dataSource.apply(newSnapshot, animatingDifferences: animatedUpdating)
-
-    contentPool.sweep(items: contents)
-
+    setContents(snapshot: newSnapshot, animatedUpdating: animatedUpdating)
+    
+  }
+  
+  public func setContents(_ contents: [Data], inSection section: Section, animatedUpdating: Bool = true) {
+    
+    var snapshot = dataSource.snapshot()
+    
+    snapshot.deleteSections([section])
+    snapshot.appendSections([section])
+    snapshot.appendItems(contents, toSection: section)
+    
+    setContents(snapshot: snapshot, animatedUpdating: animatedUpdating)
+    
   }
 
   public func setContentInset(_ insets: UIEdgeInsets) {
     collectionView.contentInset = insets
   }
-
-}
-
-private final class _DynamicContentListViewDelegateProxy: NSObject,
-  UICollectionViewDelegate
-{
-
-  private let _didSelectItemAt: (IndexPath) -> Void
-
-  init(
-    didSelectItemAt: @escaping (IndexPath) -> Void
-  ) {
-    _didSelectItemAt = didSelectItemAt
+  
+  public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    let item = dataSource.itemIdentifier(for: indexPath)!
+    self._didSelectItemAt?(item)
   }
-
-  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    _didSelectItemAt(indexPath)
-  }
-
+  
 }
 
 @available(iOS 13, *)
-extension DynamicContentListView {
+public typealias DyanmicCompositionalLayoutSingleSectionView<Data: Hashable> = DynamicCompositionalLayoutView<DynamicCompositionalLayoutSingleSection, Data>
+
+public enum DynamicCompositionalLayoutSingleSection: Hashable {
+  case main
+}
+
+@available(iOS 13, *)
+extension DynamicCompositionalLayoutView {
 
   private final class InternalCollectionView: UICollectionView {
 
@@ -443,8 +397,6 @@ public enum DynamicContentListItem<Data: Hashable & Sendable>: Hashable, Sendabl
 
 public final class DynamicContentListViewContainerCell: UICollectionViewCell {
 
-  private var _contentView: UIView?
-
   public override init(frame: CGRect) {
     super.init(frame: frame)
   }
@@ -455,8 +407,11 @@ public final class DynamicContentListViewContainerCell: UICollectionViewCell {
   }
 
   public func set(content: UIView) {
-
-    _contentView?.removeFromSuperview()
+        
+    if content.superview == contentView {
+      // already in display
+      return
+    }
 
     contentView.addSubview(content)
     content.translatesAutoresizingMaskIntoConstraints = false
@@ -468,8 +423,82 @@ public final class DynamicContentListViewContainerCell: UICollectionViewCell {
       content.leftAnchor.constraint(equalTo: contentView.leftAnchor),
     ])
 
-    self._contentView = content
-
+  }
+  
+  public override func prepareForReuse() {
+    super.prepareForReuse()
+    
+    for subview in contentView.subviews {
+      subview.removeFromSuperview()
+    }
+    
   }
 
+}
+
+open class DynamicSizingCollectionViewCell: UICollectionViewCell {
+  
+  public override init(
+    frame: CGRect
+  ) {
+    super.init(frame: frame)
+  }
+  
+  @available(*, unavailable)
+  public required init?(
+    coder: NSCoder
+  ) {
+    fatalError()
+  }
+  
+  open override func invalidateIntrinsicContentSize() {
+    if #available(iOS 16, *) {
+      // from iOS 16, auto-resizing runs
+      super.invalidateIntrinsicContentSize()
+    } else {
+      super.invalidateIntrinsicContentSize()
+      self.layoutWithInvalidatingCollectionViewLayout(animated: true)
+    }
+  }
+  
+  public func layoutWithInvalidatingCollectionViewLayout(animated: Bool) {
+    
+    guard let collectionView = (superview as? UICollectionView) else {
+      return
+    }
+    
+    if animated {
+      
+      UIView.animate(
+        withDuration: 0.5,
+        delay: 0,
+        usingSpringWithDamping: 1,
+        initialSpringVelocity: 0,
+        options: [
+          .beginFromCurrentState,
+          .allowUserInteraction,
+          .overrideInheritedCurve,
+          .overrideInheritedOptions,
+          .overrideInheritedDuration,
+        ],
+        animations: {
+          collectionView.collectionViewLayout.invalidateLayout()
+          collectionView.layoutIfNeeded()
+        },
+        completion: { (finish) in
+          
+        }
+      )
+      
+    } else {
+      
+      CATransaction.begin()
+      CATransaction.setDisableActions(true)
+      collectionView.collectionViewLayout.invalidateLayout()
+      collectionView.layoutIfNeeded()
+      CATransaction.commit()
+      
+    }
+  }
+  
 }

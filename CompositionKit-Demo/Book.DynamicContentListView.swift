@@ -4,166 +4,231 @@ import StorybookKit
 import SwiftUI
 import UIKit
 
+enum Section {
+  case a
+  case b
+  case c
+}
+
 @available(iOS 13, *)
 @MainActor
 extension Book {
   static var dynamicContentListView: BookView {
     BookNavigationLink(title: "DynamicContentListView") {
-      
-      BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) { () -> DynamicContentListView<DynamicContentListItem<Book.Item>> in
-        
-        let view = DynamicContentListView<DynamicContentListItem<Item>>.init(scrollDirection: .vertical)
-        
-        view.registerCell(Cell.self)
-        
-        view.setUp(
-          cellProvider: .init { context in
-           
-            switch context.data {
-            case .data(let data):
-              
-              return context.containerCell {
-                DataRepresentingView(item: data)
-              }
-              
-            case .view(let view):
-              return context.containerCell(content: view)
-            }
-            
-          },
-          didSelectItemAt: { _ in
-          }
-        )
-        
-        let items = (0 ..< 100).map { _ in
-          Item(text: BookGenerator.randomEmoji())
-        }
-        
-        view.setContents(items.map { .data($0) })
-        
-        return view
-      }
-      .addButton("Update content") { view in
-        
-        let items = (0 ..< 100).map { _ in
-          Item(text: BookGenerator.randomEmoji())
-        }
-        
-        view.setContents(items.map { .data($0) })
-      }
-            
-      BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
-        let view = DynamicContentListView<Item>.init(scrollDirection: .vertical)
 
-        view.registerCell(Cell.self)
-
-        view.setUp(
-          cellProvider: .init { context in
-            
-            let cell = context.dequeueReusableCell(Cell.self)
-            cell.update(context.data)
-            
-            return cell
-          },
-          didSelectItemAt: { _ in
-          }
-        )
-
-        let items = (0 ..< 100).map { _ in
-          Item(text: BookGenerator.loremIpsum(length: 10))
-        }
-        
-        view.setContents(items)
-
-        return view
-      }
-
-      BookText("HostingCell")
-
-      if #available(iOS 14, *) {
-        BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
-          @MainActor
-          class MyConfiguration: UIContentConfiguration {
-            @MainActor
-            class MyContentView: UIView, UIContentView {
-              let label = UILabel()
-
-              var configuration: UIContentConfiguration
-
-              init() {
-                self.configuration = MyConfiguration()
-                super.init(frame: .zero)
-
-                label.text = "Hey"
-
-                Mondrian.buildSubviews(on: self) {
-                  VStackBlock {
-                    label
-                  }
-                  .padding(.vertical, 10)
-                }
-              }
-
-              @available(*, unavailable)
-              required init?(coder _: NSCoder) {
-                fatalError("init(coder:) has not been implemented")
-              }
-            }
-
-            @MainActor
-            func makeContentView() -> UIView & UIContentView {
-              print("Make")
-              return MyContentView()
-            }
-
-            func updated(for _: UIConfigurationState) -> Self {
-              self
-            }
-          }
-
-          let view = DynamicContentListView<Item>.init(scrollDirection: .vertical)
-
-          let registration = UICollectionView.CellRegistration<UICollectionViewCell, Item>.init {
-            cell,
-              _,
-              _ in
-            let content = MyConfiguration()
-            cell.contentConfiguration = content
-          }
-
+      BookNavigationLink(title: "Sectioned") {
+        BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) { () -> DynamicCompositionalLayoutView<Section, Item> in
+          
+          let view = DynamicCompositionalLayoutView<Section, Item>.init(scrollDirection: .vertical)
+                    
           view.setUp(
             cellProvider: .init { context in
-              
-              let cell = context.collectionView.dequeueConfiguredReusableCell(
-                using: registration,
-                for: context.indexPath,
-                item: context.data
-              )
-              
-              return cell
+                            
+              return context.containerCell {
+                DataRepresentingView(item: context.data)
+              }
               
             },
             didSelectItemAt: { _ in
             }
           )
-
-          let items = (0 ..< 100).map { _ in
-            Item(text: BookGenerator.loremIpsum(length: 10))
+ 
+          view.setContents([.init(id: "2", text: "2")], inSection: .b, animatedUpdating: true)
+          view.setContents([.init(id: "1", text: "1")], inSection: .a, animatedUpdating: true)
+          
+          return view
+        }
+        .addButton("Update content") { view in
+          
+          let items = (0 ..< 3).map { _ in
+            Item(text: BookGenerator.randomEmoji())
           }
-
-          view.setContents(items)
-
+          
+          view.setContents(items, inSection: .b)
+        }
+        
+      }
+      
+      BookNavigationLink(title: "Horizontal") {
+        BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) { () -> DynamicCompositionalLayoutView<Section, Item> in
+          
+          let view = DynamicCompositionalLayoutView<Section, Item>.init(scrollDirection: .horizontal)
+          
+          view.setUp(
+            cellProvider: .init { context in
+              
+              return context.containerCell {
+                DataRepresentingView(item: context.data)
+              }
+              
+            },
+            didSelectItemAt: { _ in
+            }
+          )
+          
+          view.setContents([.init(id: "2", text: "2")], inSection: .b, animatedUpdating: true)
+          view.setContents([.init(id: "1", text: "1")], inSection: .a, animatedUpdating: true)
+          
           return view
         }
       }
-
-      #if swift(>=5.7)
+      
+      BookNavigationLink(title: "Single") {
+        
+        BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) { () -> DyanmicCompositionalLayoutSingleSectionView<DynamicContentListItem<Book.Item>> in
+          
+          let view = DyanmicCompositionalLayoutSingleSectionView<DynamicContentListItem<Item>>.init(scrollDirection: .vertical)
+          
+          view.registerCell(Cell.self)
+          
+          view.setUp(
+            cellProvider: .init { context in
+              
+              switch context.data {
+              case .data(let data):
+                
+                return context.containerCell {
+                  DataRepresentingView(item: data)
+                }
+                
+              case .view(let view):
+                return context.containerCell(content: view)
+              }
+              
+            },
+            didSelectItemAt: { _ in
+            }
+          )
+          
+          let items = (0 ..< 100).map { _ in
+            Item(text: BookGenerator.randomEmoji())
+          }
+          
+          view.setContents(items.map { .data($0) })
+          
+          return view
+        }
+        .addButton("Update content") { view in
+          
+          let items = (0 ..< 100).map { _ in
+            Item(text: BookGenerator.randomEmoji())
+          }
+          
+          view.setContents(items.map { .data($0) })
+        }
+        
+        BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
+          let view = DyanmicCompositionalLayoutSingleSectionView<Item>.init(scrollDirection: .vertical)
+          
+          view.registerCell(Cell.self)
+          
+          view.setUp(
+            cellProvider: .init { context in
+              
+              let cell = context.dequeueReusableCell(Cell.self)
+              cell.update(context.data)
+              
+              return cell
+            },
+            didSelectItemAt: { _ in
+            }
+          )
+          
+          let items = (0 ..< 100).map { _ in
+            Item(text: BookGenerator.loremIpsum(length: 10))
+          }
+          
+          view.setContents(items)
+          
+          return view
+        }
+        
+        BookText("HostingCell")
+        
+        if #available(iOS 14, *) {
+          BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
+            @MainActor
+            class MyConfiguration: UIContentConfiguration {
+              @MainActor
+              class MyContentView: UIView, UIContentView {
+                let label = UILabel()
+                
+                var configuration: UIContentConfiguration
+                
+                init() {
+                  self.configuration = MyConfiguration()
+                  super.init(frame: .zero)
+                  
+                  label.text = "Hey"
+                  
+                  Mondrian.buildSubviews(on: self) {
+                    VStackBlock {
+                      label
+                    }
+                    .padding(.vertical, 10)
+                  }
+                }
+                
+                @available(*, unavailable)
+                required init?(coder _: NSCoder) {
+                  fatalError("init(coder:) has not been implemented")
+                }
+              }
+              
+              @MainActor
+              func makeContentView() -> UIView & UIContentView {
+                print("Make")
+                return MyContentView()
+              }
+              
+              func updated(for _: UIConfigurationState) -> Self {
+                self
+              }
+            }
+            
+            let view = DyanmicCompositionalLayoutSingleSectionView<Item>.init(scrollDirection: .vertical)
+            
+            let registration = UICollectionView.CellRegistration<UICollectionViewCell, Item>.init {
+              cell,
+              _,
+              _ in
+              let content = MyConfiguration()
+              cell.contentConfiguration = content
+            }
+            
+            view.setUp(
+              cellProvider: .init { context in
+                
+                let cell = context.collectionView.dequeueConfiguredReusableCell(
+                  using: registration,
+                  for: context.indexPath,
+                  item: context.data
+                )
+                
+                return cell
+                
+              },
+              didSelectItemAt: { _ in
+              }
+            )
+            
+            let items = (0 ..< 100).map { _ in
+              Item(text: BookGenerator.loremIpsum(length: 10))
+            }
+            
+            view.setContents(items)
+            
+            return view
+          }
+        }
+        
+#if swift(>=5.7)
         if #available(iOS 16, *) {
           BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
-            let view = DynamicContentListView<Item>.init(scrollDirection: .vertical)
-
+            let view = DyanmicCompositionalLayoutSingleSectionView<Item>.init(scrollDirection: .vertical)
+            
             view.registerCell(Cell.self)
-
+            
             view.setUp(
               cellProvider: .init { context in
                 
@@ -180,22 +245,23 @@ extension Book {
               didSelectItemAt: { _ in
               }
             )
-
+            
             let items = (0 ..< 100).map { _ in
               Item(text: BookGenerator.loremIpsum(length: 10))
             }
-
+            
             view.setContents(items)
-
+            
             return view
           }
         }
-      #endif
+#endif
+      }
     }
   }
 
   struct Item: Hashable, Identifiable {
-    var id: UUID = .init()
+    var id: String = UUID().uuidString
 
     let text: String
   }
@@ -262,7 +328,11 @@ extension Book {
   
   final class DataRepresentingView: HostingView {
     
+    private let item: Item
+    
     init(item: Item) {
+      
+      self.item = item
       
       print("Init, \(item)")
       
@@ -278,6 +348,16 @@ extension Book {
         .padding(20)
       }
       
+    }
+    
+    override func didMoveToSuperview() {
+      super.didMoveToSuperview()
+      
+      if superview == nil {
+        print("removed", item)
+      } else {
+//        print("added", item, superview!)
+      }
     }
     
   }
