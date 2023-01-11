@@ -357,7 +357,7 @@ open class DynamicCompositionalLayoutView<Section: Hashable, Data: Hashable>: Co
 }
 
 @available(iOS 13, *)
-public typealias DyanmicCompositionalLayoutSingleSectionView<Data: Hashable> = DynamicCompositionalLayoutView<DynamicCompositionalLayoutSingleSection, Data>
+public typealias DynamicCompositionalLayoutSingleSectionView<Data: Hashable> = DynamicCompositionalLayoutView<DynamicCompositionalLayoutSingleSection, Data>
 
 public enum DynamicCompositionalLayoutSingleSection: Hashable {
   case main

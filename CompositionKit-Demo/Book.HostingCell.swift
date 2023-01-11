@@ -10,7 +10,7 @@ extension Book {
   static var hostingCell: some BookView {
     BookNavigationLink(title: "HostingCell") {
       BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
-        let view = DyanmicCompositionalLayoutSingleSectionView<Item>.init(scrollDirection: .vertical)
+        let view = DynamicCompositionalLayoutSingleSectionView<Item>.init(scrollDirection: .vertical)
 
         view.registerCell(HostingCell.self)
 

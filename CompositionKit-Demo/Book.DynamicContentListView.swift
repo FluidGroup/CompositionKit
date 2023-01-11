@@ -75,9 +75,9 @@ extension Book {
       
       BookNavigationLink(title: "Single") {
         
-        BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) { () -> DyanmicCompositionalLayoutSingleSectionView<DynamicContentListItem<Book.Item>> in
+        BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) { () -> DynamicCompositionalLayoutSingleSectionView<DynamicContentListItem<Book.Item>> in
           
-          let view = DyanmicCompositionalLayoutSingleSectionView<DynamicContentListItem<Item>>.init(scrollDirection: .vertical)
+          let view = DynamicCompositionalLayoutSingleSectionView<DynamicContentListItem<Item>>.init(scrollDirection: .vertical)
           
           view.registerCell(Cell.self)
           
@@ -118,7 +118,7 @@ extension Book {
         }
         
         BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
-          let view = DyanmicCompositionalLayoutSingleSectionView<Item>.init(scrollDirection: .vertical)
+          let view = DynamicCompositionalLayoutSingleSectionView<Item>.init(scrollDirection: .vertical)
           
           view.registerCell(Cell.self)
           
@@ -186,7 +186,7 @@ extension Book {
               }
             }
             
-            let view = DyanmicCompositionalLayoutSingleSectionView<Item>.init(scrollDirection: .vertical)
+            let view = DynamicCompositionalLayoutSingleSectionView<Item>.init(scrollDirection: .vertical)
             
             let registration = UICollectionView.CellRegistration<UICollectionViewCell, Item>.init {
               cell,
@@ -225,7 +225,7 @@ extension Book {
 #if swift(>=5.7)
         if #available(iOS 16, *) {
           BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) {
-            let view = DyanmicCompositionalLayoutSingleSectionView<Item>.init(scrollDirection: .vertical)
+            let view = DynamicCompositionalLayoutSingleSectionView<Item>.init(scrollDirection: .vertical)
             
             view.registerCell(Cell.self)
             
