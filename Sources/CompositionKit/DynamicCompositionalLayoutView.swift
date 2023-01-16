@@ -63,7 +63,6 @@ open class DynamicCompositionalLayoutView<Section: Hashable, Data: Hashable>: Co
     fileprivate let contentPool: ContentPool
 
     func dequeueViewContainer() -> DynamicContentListViewContainerCell {
-      print(indexPath)
       return dequeueReusableCell(DynamicContentListViewContainerCell.self)
     }
     
