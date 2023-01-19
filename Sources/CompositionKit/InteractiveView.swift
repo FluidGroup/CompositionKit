@@ -55,17 +55,18 @@ public final class InteractiveView<ContentView: UIView>: UIView {
     accessibilityTraits = .button
 
     if let overlayView = overlayView {
-
-      mondrian.buildSubviews {
+      
+      Mondrian.buildSubviews(on: self) {
         ZStackBlock {
           animationTargetViw
             .viewBlock
             .overlay(overlayView)
         }
       }
+      
     } else {
 
-      mondrian.buildSubviews {
+      Mondrian.buildSubviews(on: self) {
         ZStackBlock {
           animationTargetViw
             .viewBlock
@@ -148,3 +149,86 @@ public final class InteractiveView<ContentView: UIView>: UIView {
 
 }
 
+public final class HighlightView<ContentView: UIView>: UIView, DynamicContentListCellContentType {
+  
+  public var isHighlighted: Bool = false {
+    didSet {
+      guard oldValue != isHighlighted else { return }
+      
+      if isHighlighted {
+        animationHandler?(true, self, animationTargetViw)
+        haptics?.send(event: .onTouchDownInside)
+      }  else {
+        animationHandler?(false, self, animationTargetViw)
+        haptics?.send(event: .onTouchUpInside)
+      }
+    }
+  }
+   
+  public let contentView: ContentView
+    
+  public let overlayView: UIView?
+  
+  private let animationTargetViw: UIView
+  
+  private let animation: HighlightAnimationDescriptor
+  private let haptics: HapticsDescriptor?
+  
+  private let animationHandler: HighlightAnimationDescriptor.Context.Handler?
+  
+  public init(
+    animation: HighlightAnimationDescriptor,
+    haptics: HapticsDescriptor? = nil,
+    contentView: ContentView
+  ) {
+    
+    self.haptics = haptics
+    self.animation = animation
+    let context = animation.prepare()
+    self.overlayView = context.overlay
+    self.animationHandler = context.handler
+    self.animationTargetViw = contentView
+    self.contentView = contentView
+    
+    super.init(frame: .zero)
+    
+    addSubview(contentView)
+    
+    contentView.mondrian.layout.edges(.toSuperview).activate()
+    contentView.isUserInteractionEnabled = false
+    
+    accessibilityTraits = .button
+    
+    if let overlayView = overlayView {
+      
+      Mondrian.buildSubviews(on: self) {
+        ZStackBlock {
+          animationTargetViw
+            .viewBlock
+            .overlay(overlayView)
+        }
+      }
+      
+    } else {
+      
+      Mondrian.buildSubviews(on: self) {
+        ZStackBlock {
+          animationTargetViw
+            .viewBlock
+        }
+      }
+    }
+          
+  }
+  
+  @available(*, unavailable)
+  public required init?(
+    coder: NSCoder
+  ) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+  public func dynamicContentListContainerCell(didChangeHighlighted isHighlighted: Bool) {
+    self.isHighlighted = isHighlighted
+  }
+}
