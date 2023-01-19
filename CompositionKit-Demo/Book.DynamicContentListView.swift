@@ -29,7 +29,28 @@ extension Book {
               }
               
             },
-            didSelectItemAt: { _ in
+            actionHandler: { [weak view] action in
+              
+              guard let view else { return }
+              
+              switch action {
+              case .didSelect(let item):
+                break
+              case .batchFetch(let thunk):
+                thunk {
+                  try? await Task.sleep(nanoseconds: 1_000_000_000)
+                  
+                  let items = (0 ..< 3).map { _ in
+                    Item(text: BookGenerator.randomEmoji())
+                  }
+                  
+                  var snapshot = view.snapshot()
+                  snapshot.appendItems(items, toSection: .b)
+                  
+                  view.setContents(snapshot: snapshot, animatedUpdating: true)
+                }
+
+              }
             }
           )
  
@@ -40,7 +61,7 @@ extension Book {
         }
         .addButton("Update content") { view in
           
-          let items = (0 ..< 3).map { _ in
+          let items = (0 ..< 30).map { _ in
             Item(text: BookGenerator.randomEmoji())
           }
           
@@ -62,8 +83,7 @@ extension Book {
               }
               
             },
-            didSelectItemAt: { _ in
-            }
+            actionHandler: { _ in }
           )
           
           view.setContents([.init(id: "2", text: "2")], inSection: .b, animatedUpdating: true)
@@ -96,8 +116,7 @@ extension Book {
               }
               
             },
-            didSelectItemAt: { _ in
-            }
+            actionHandler: { _ in }
           )
           
           let items = (0 ..< 100).map { _ in
@@ -130,8 +149,7 @@ extension Book {
               
               return cell
             },
-            didSelectItemAt: { _ in
-            }
+            actionHandler: { _ in }
           )
           
           let items = (0 ..< 100).map { _ in
@@ -208,8 +226,7 @@ extension Book {
                 return cell
                 
               },
-              didSelectItemAt: { _ in
-              }
+              actionHandler: { _ in }
             )
             
             let items = (0 ..< 100).map { _ in
@@ -242,8 +259,7 @@ extension Book {
                 return cell
                 
               },
-              didSelectItemAt: { _ in
-              }
+              actionHandler: { _ in }
             )
             
             let items = (0 ..< 100).map { _ in

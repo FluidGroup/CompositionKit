@@ -27,8 +27,7 @@ extension Book {
             return cell
             
           },
-          didSelectItemAt: { _ in
-          }
+          actionHandler: { _ in }
         )
 
         let items = (0 ..< 100).map { i in
