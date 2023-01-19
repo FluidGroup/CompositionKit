@@ -396,6 +396,16 @@ open class DynamicCompositionalLayoutView<Section: Hashable, Data: Hashable>: Co
   public func setContentInset(_ insets: UIEdgeInsets) {
     collectionView.contentInset = insets
   }
+  
+  public func scroll(to data: Data, at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
+    guard let indexPath = dataSource.indexPath(for: data) else {
+      return
+    }
+    
+    collectionView.scrollToItem(at: indexPath, at: scrollPosition, animated: animated)
+  }
+  
+  // MARK: - UICollectionViewDelegate
 
   public func collectionView(
     _ collectionView: UICollectionView,
