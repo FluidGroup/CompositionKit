@@ -65,8 +65,8 @@ open class DynamicCompositionalLayoutView<Section: Hashable, Data: Hashable>: Co
 
     fileprivate let contentPool: ContentPool
 
-    func dequeueViewContainer() -> DynamicContentListViewContainerCell {
-      return dequeueReusableCell(DynamicContentListViewContainerCell.self)
+    func dequeueViewContainer() -> DynamicCompositionalLayoutContentContainerCell {
+      return dequeueReusableCell(DynamicCompositionalLayoutContentContainerCell.self)
     }
 
     public func dequeueReusableCell<Cell: UICollectionViewCell>(_ cellType: Cell.Type) -> Cell {
@@ -223,8 +223,8 @@ open class DynamicCompositionalLayoutView<Section: Hashable, Data: Hashable>: Co
     self.collectionView.prefetchDataSource = nil
 
     collectionView.register(
-      DynamicContentListViewContainerCell.self,
-      forCellWithReuseIdentifier: _typeName(DynamicContentListViewContainerCell.self)
+      DynamicCompositionalLayoutContentContainerCell.self,
+      forCellWithReuseIdentifier: _typeName(DynamicCompositionalLayoutContentContainerCell.self)
     )
     
     contentPagingTrigger.onBatchFetch = { [weak self] in
@@ -457,18 +457,36 @@ public enum DynamicContentListItem<Data: Hashable & Sendable>: Hashable, Sendabl
   }
 }
 
-public final class DynamicContentListViewContainerCell: UICollectionViewCell {
+public protocol DynamicContentListCellContentType: UIView {
+  
+  func dynamicContentListContainerCell(didChangeHighlighted isHighlighted: Bool)
+  
+}
 
-  public override init(frame: CGRect) {
+final class DynamicCompositionalLayoutContentContainerCell: DynamicSizingCollectionViewCell {
+  
+  override var isHighlighted: Bool {
+    didSet {
+      if let content = currentContent as? DynamicContentListCellContentType {
+        content.dynamicContentListContainerCell(didChangeHighlighted: isHighlighted)
+      }
+    }
+  }
+
+  override init(frame: CGRect) {
     super.init(frame: frame)
   }
 
   @available(*, unavailable)
-  public required init?(coder: NSCoder) {
+  required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+  
+  private var currentContent: UIView? {
+    contentView.subviews.first
+  }
 
-  public func set(content: UIView) {
+  func set(content: UIView) {
 
     if content.superview == contentView {
       // already in display
@@ -487,7 +505,7 @@ public final class DynamicContentListViewContainerCell: UICollectionViewCell {
 
   }
 
-  public override func prepareForReuse() {
+  override func prepareForReuse() {
     super.prepareForReuse()
 
     for subview in contentView.subviews {
