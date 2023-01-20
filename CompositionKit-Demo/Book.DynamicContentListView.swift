@@ -15,6 +15,97 @@ enum Section {
 extension Book {
   static var dynamicContentListView: BookView {
     BookNavigationLink(title: "DynamicContentListView") {
+      
+      BookNavigationLink(title: "Grid") {
+        BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) { () -> DynamicCompositionalLayoutSingleSectionView<Item> in
+          
+          let view = DynamicCompositionalLayoutSingleSectionView<Item>(layout: {
+            let left = NSCollectionLayoutItem(
+              layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.5),
+                heightDimension: .estimated(300)
+              )
+            )&>.do {
+              $0.contentInsets = .init(top: 0, leading: 24, bottom: 0, trailing: 8)
+            }
+            
+            let right = NSCollectionLayoutItem(
+              layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.5),
+                heightDimension: .estimated(300)
+              )
+            )&>.do {
+              $0.contentInsets = .init(top: 0, leading: 8, bottom: 0, trailing: 24)
+            }
+            
+            let group = NSCollectionLayoutGroup.horizontal(
+              layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .estimated(300)
+              ),
+              subitems: [
+                left,
+                right
+              ]
+            )
+            
+            let section = NSCollectionLayoutSection(group: group)
+            section.interGroupSpacing = 20
+            section.contentInsets = .init(top: 20, leading: 0, bottom: 20, trailing: 0)
+            
+            let configuration = UICollectionViewCompositionalLayoutConfiguration()
+            configuration.scrollDirection = .vertical
+            
+            let layout = UICollectionViewCompositionalLayout.init(section: section)
+            return layout
+          }())
+          
+          view.setUp(
+            cellProvider: .init { context in
+              
+              return context.containerCell {
+                DataRepresentingView(item: context.data)
+              }
+              
+            },
+            actionHandler: { [weak view] action in
+              
+              guard let view else { return }
+              
+              switch action {
+              case .didSelect(let item):
+                break
+              case .batchFetch(let thunk):
+                thunk {
+                  try? await Task.sleep(nanoseconds: 1_000_000_000)
+                  
+                  let items = (0 ..< 3).map { _ in
+                    Item(text: BookGenerator.randomEmoji())
+                  }
+                  
+                  var snapshot = view.snapshot()
+                  snapshot.appendItems(items)
+                  
+                  view.setContents(snapshot: snapshot, animatedUpdating: true)
+                }
+                
+              }
+            }
+          )
+          
+          view.setContents([.init(id: "2", text: "2")], animatedUpdating: true)
+          
+          return view
+        }
+        .addButton("Update content") { view in
+          
+          let items = (0 ..< 30).map { _ in
+            Item(text: BookGenerator.randomEmoji())
+          }
+          
+          view.setContents(items)
+        }
+      }
 
       BookNavigationLink(title: "Sectioned") {
         BookPreview(expandsWidth: true, maxHeight: 300, minHeight: 300) { () -> DynamicCompositionalLayoutView<Section, Item> in
