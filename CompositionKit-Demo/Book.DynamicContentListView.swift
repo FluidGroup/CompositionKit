@@ -60,11 +60,21 @@ extension Book {
             return layout
           }())
           
+          view.registerCell(Cell.self)
+          
           view.setUp(
             cellProvider: .init { context in
               
+//              let cell = context.dequeueReusableCell(Cell.self)
+//
+//              cell.update(context.data)
+//              return cell
+//
               return context.containerCell {
-                DataRepresentingView(item: context.data)
+//                let cell = Cell()
+//                cell.update(context.data)
+//                return cell
+                return DataRepresentingView(item: context.data)
               }
               
             },
