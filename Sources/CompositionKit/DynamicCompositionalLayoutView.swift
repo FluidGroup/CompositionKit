@@ -364,7 +364,18 @@ open class DynamicCompositionalLayoutView<Section: Hashable, Data: Hashable>: Co
    */
   public func setContents(_ contents: [Data], animatedUpdating: Bool = true)
   where Section == DynamicCompositionalLayoutSingleSection {
-
+    
+    if #available(iOS 14, *) {
+      
+    } else {
+      // fix crash
+      // https://developer.apple.com/forums/thread/126742
+      let currentSnapshot = self.dataSource.snapshot()
+      if currentSnapshot.numberOfItems == 0, contents.isEmpty {
+        return
+      }
+    }
+    
     var newSnapshot = NSDiffableDataSourceSnapshot<Section, Data>.init()
     newSnapshot.appendSections([.main])
     newSnapshot.appendItems(contents, toSection: .main)
