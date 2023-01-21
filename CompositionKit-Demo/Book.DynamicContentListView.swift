@@ -61,21 +61,24 @@ extension Book {
           }())
           
           view.registerCell(Cell.self)
+          view.registerCell(HostingCell.self)
           
           view.setUp(
             cellProvider: .init { context in
-              
-//              let cell = context.dequeueReusableCell(Cell.self)
-//
-//              cell.update(context.data)
-//              return cell
-//
-              return context.containerCell {
-//                let cell = Cell()
-//                cell.update(context.data)
-//                return cell
-                return DataRepresentingView(item: context.data)
+
+              let hosting = context.dequeueReusableCell(HostingCell.self)
+              let item = context.data
+              hosting.setContent { _ in
+                HStack {
+                  Text(item.text)
+                  Button("Tap") {
+                    
+                  }
+                }
+                .padding(20)
               }
+              
+              return hosting
               
             },
             actionHandler: { [weak view] action in
