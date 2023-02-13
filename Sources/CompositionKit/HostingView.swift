@@ -21,6 +21,14 @@ struct RootView<State>: SwiftUI.View {
 
 @available(iOS 13, *)
 open class HostingView: UIView {
+  
+  public struct Configuration {
+    public var registersAsChildViewController: Bool
+    
+    public init(registersAsChildViewController: Bool = true) {
+      self.registersAsChildViewController = registersAsChildViewController
+    }
+  }
 
   public struct State {
 
@@ -31,6 +39,8 @@ open class HostingView: UIView {
   private let proxy: Proxy<State> = .init(state: .init())
   
   public let ignoringSafeAreaEdges: Edge.Set
+  
+  public let configuration: Configuration
 
   public convenience init<Content: View>(
     ignoringSafeAreaEdges: Edge.Set = .all,
@@ -42,8 +52,12 @@ open class HostingView: UIView {
 
   // MARK: - Initializers
 
-  public init(ignoringSafeAreaEdges: Edge.Set = .all) {
+  public init(
+    ignoringSafeAreaEdges: Edge.Set = .all,
+    configuration: Configuration = .init()
+  ) {
     self.ignoringSafeAreaEdges = ignoringSafeAreaEdges
+    self.configuration = configuration
     
     super.init(frame: .null)
 
@@ -93,19 +107,21 @@ open class HostingView: UIView {
   open override func didMoveToWindow() {
 
     super.didMoveToWindow()
-    
-    // https://muukii.notion.site/Why-we-need-to-add-UIHostingController-to-view-controller-chain-14de20041c99499d803f5a877c9a1dd1
 
-    if let _ = window {
-      if let parentViewController = self.findNearestViewController() {
-        parentViewController.addChild(hostingController)
-        hostingController.didMove(toParent: parentViewController)
+    if configuration.registersAsChildViewController {
+      // https://muukii.notion.site/Why-we-need-to-add-UIHostingController-to-view-controller-chain-14de20041c99499d803f5a877c9a1dd1
+      
+      if let _ = window {
+        if let parentViewController = self.findNearestViewController() {
+          parentViewController.addChild(hostingController)
+          hostingController.didMove(toParent: parentViewController)
+        } else {
+          assertionFailure()
+        }
       } else {
-        assertionFailure()
+        hostingController.willMove(toParent: nil)
+        hostingController.removeFromParent()
       }
-    } else {
-      hostingController.willMove(toParent: nil)
-      hostingController.removeFromParent()
     }
   }
 
