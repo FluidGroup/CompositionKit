@@ -1,11 +1,14 @@
 import UIKit
 import MondrianLayout
 
-open class AnyView: UIView {
+@available(*, deprecated, renamed: "AnyUIView", message: "To avoid confliting with SwiftUI.AnyView")
+public typealias AnyView = AnyUIView
+
+open class AnyUIView: UIView {
 
   private var _onDeinit: (() -> Void)?
 
-  public init(@EntrypointBuilder build: (AnyView) -> [EntrypointBuilder.Either]) {
+  public init(@EntrypointBuilder build: (AnyUIView) -> [EntrypointBuilder.Either]) {
 
     super.init(frame: .null)
 
