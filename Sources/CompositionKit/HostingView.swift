@@ -4,7 +4,7 @@ import SwiftUI
 final class Proxy<State>: ObservableObject {
   @Published var state: State
   @Published var content: (State) -> SwiftUI.AnyView? = { _ in nil }
-  
+
   init(state: State) {
     self.state = state
   }
@@ -13,7 +13,7 @@ final class Proxy<State>: ObservableObject {
 @available(iOS 13, *)
 struct RootView<State>: SwiftUI.View {
   @ObservedObject var proxy: Proxy<State>
-  
+
   var body: some View {
     proxy.content(proxy.state)
   }
@@ -21,10 +21,10 @@ struct RootView<State>: SwiftUI.View {
 
 @available(iOS 13, *)
 open class HostingView: UIView {
-  
+
   public struct Configuration {
     public var registersAsChildViewController: Bool
-    
+
     public init(registersAsChildViewController: Bool = true) {
       self.registersAsChildViewController = registersAsChildViewController
     }
@@ -35,36 +35,63 @@ open class HostingView: UIView {
   }
 
   private var hostingController: HostingController<RootView<State>>!
-  
+
   private let proxy: Proxy<State> = .init(state: .init())
-  
+
   public let ignoringSafeAreaEdges: Edge.Set
-  
+
   public let configuration: Configuration
 
   public convenience init<Content: View>(
+    _ name: String = "",
+    _ file: StaticString = #file,
+    _ function: StaticString = #function,
+    _ line: UInt = #line,
     ignoringSafeAreaEdges: Edge.Set = .all,
+    configuration: Configuration = .init(),
     @ViewBuilder content: @escaping (State) -> Content
   ) {
-    self.init(ignoringSafeAreaEdges: ignoringSafeAreaEdges)
+    self.init(
+      name,
+      file,
+      function,
+      line,
+      ignoringSafeAreaEdges: ignoringSafeAreaEdges,
+      configuration: configuration
+    )
     setContent(content: content)
   }
 
   // MARK: - Initializers
 
   public init(
+    _ name: String = "",
+    _ file: StaticString = #file,
+    _ function: StaticString = #function,
+    _ line: UInt = #line,
     ignoringSafeAreaEdges: Edge.Set = .all,
     configuration: Configuration = .init()
   ) {
     self.ignoringSafeAreaEdges = ignoringSafeAreaEdges
     self.configuration = configuration
-    
+
     super.init(frame: .null)
+
+    #if DEBUG
+    let file = URL(string: file.description)?.deletingPathExtension().lastPathComponent ?? "unknown"
+    self.accessibilityIdentifier = [
+      name,
+      file,
+      function.description,
+      line.description,
+    ]
+    .joined(separator: ".")
+    #endif
 
     self.hostingController = HostingController(
       rootView: RootView(proxy: proxy)
     )
-    
+
     hostingController.view.backgroundColor = .clear
 
     addSubview(hostingController.view)
@@ -76,16 +103,16 @@ open class HostingView: UIView {
       hostingController.view.bottomAnchor.constraint(equalTo: bottomAnchor),
       hostingController.view.leftAnchor.constraint(equalTo: leftAnchor),
     ])
-    
+
     hostingController.view.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     hostingController.view.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
-    
+
     hostingController.view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
     hostingController.view.setContentHuggingPriority(.defaultHigh, for: .vertical)
-    
+
     setContentHuggingPriority(.defaultHigh, for: .horizontal)
     setContentHuggingPriority(.defaultHigh, for: .vertical)
-    
+
     hostingController.onViewDidLayoutSubviews = { controller in
       // TODO: Reduces number of calling invalidation, it's going to be happen even it's same value.
       controller.view.invalidateIntrinsicContentSize()
@@ -97,7 +124,7 @@ open class HostingView: UIView {
   public required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
+
   // MARK: UIView
 
   open override func sizeThatFits(_ size: CGSize) -> CGSize {
@@ -110,7 +137,7 @@ open class HostingView: UIView {
 
     if configuration.registersAsChildViewController {
       // https://muukii.notion.site/Why-we-need-to-add-UIHostingController-to-view-controller-chain-14de20041c99499d803f5a877c9a1dd1
-      
+
       if let _ = window {
         if let parentViewController = self.findNearestViewController() {
           parentViewController.addChild(hostingController)
