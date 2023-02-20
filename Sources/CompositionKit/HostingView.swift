@@ -19,6 +19,9 @@ struct RootView<State>: SwiftUI.View {
   }
 }
 
+/**
+ A view that hosts SwiftUI for UIKit environment.
+ */
 @available(iOS 13, *)
 open class HostingView: UIView {
 
@@ -184,4 +187,44 @@ open class HostingView: UIView {
     }
   }
 
+}
+
+/**
+ A subclass of ``HostingView`` that opt-in fixing safe-area issue.
+ */
+@available(iOS 13, *)
+open class IgnoringSafeAreaHostingView: HostingView {
+  
+  public convenience init<Content: View>(
+    _ name: String = "",
+    _ file: StaticString = #file,
+    _ function: StaticString = #function,
+    _ line: UInt = #line,
+    ignoringSafeAreaEdges: Edge.Set = .all,
+    configuration: Configuration = .init(fixesSafeArea: true),
+    @ViewBuilder content: @escaping (State) -> Content
+  ) {
+    self.init(
+      name,
+      file,
+      function,
+      line,
+      ignoringSafeAreaEdges: ignoringSafeAreaEdges,
+      configuration: configuration
+    )
+    setContent(content: content)
+  }
+  
+  // MARK: - Initializers
+  
+  public override init(
+    _ name: String = "",
+    _ file: StaticString = #file,
+    _ function: StaticString = #function,
+    _ line: UInt = #line,
+    ignoringSafeAreaEdges: Edge.Set = .all,
+    configuration: Configuration = .init(fixesSafeArea: true)
+  ) {
+    super.init(name, file, function, line, ignoringSafeAreaEdges: ignoringSafeAreaEdges, configuration: configuration)
+  }
 }
