@@ -24,9 +24,14 @@ open class HostingView: UIView {
 
   public struct Configuration {
     public var registersAsChildViewController: Bool
+    public var fixesSafeArea: Bool
 
-    public init(registersAsChildViewController: Bool = true) {
+    public init(
+      registersAsChildViewController: Bool = true,
+      fixesSafeArea: Bool = false
+    ) {
       self.registersAsChildViewController = registersAsChildViewController
+      self.fixesSafeArea = fixesSafeArea
     }
   }
 
@@ -34,7 +39,7 @@ open class HostingView: UIView {
 
   }
 
-  private var hostingController: HostingController<RootView<State>>!
+  private var hostingController: (any _HostingControllerType)!
 
   private let proxy: Proxy<State> = .init(state: .init())
 
@@ -87,10 +92,17 @@ open class HostingView: UIView {
     ]
     .joined(separator: ".")
     #endif
-
-    self.hostingController = HostingController(
-      rootView: RootView(proxy: proxy)
-    )
+    
+    if configuration.fixesSafeArea {
+      self.hostingController = FixedSafeAreaHostingController(
+        rootView: RootView(proxy: proxy)
+      )
+    } else {
+      
+      self.hostingController = HostingController(
+        rootView: RootView(proxy: proxy)
+      )
+    }
 
     hostingController.view.backgroundColor = .clear
 
@@ -153,15 +165,22 @@ open class HostingView: UIView {
   }
 
   // MARK: -
-
+  
   public final func setContent<Content: SwiftUI.View>(
     @ViewBuilder content: @escaping (State) -> Content
   ) {
     proxy.content = { [ignoringSafeAreaEdges] state in
-      SwiftUI.AnyView(
-        content(state)
-          .edgesIgnoringSafeArea(ignoringSafeAreaEdges)
-      )
+      if #available(iOS 14, *) {
+        return SwiftUI.AnyView(
+          content(state)
+            .ignoresSafeArea(edges: ignoringSafeAreaEdges)
+        )
+      } else {
+        return SwiftUI.AnyView(
+          content(state)
+            .edgesIgnoringSafeArea(ignoringSafeAreaEdges)
+        )
+      }
     }
   }
 
