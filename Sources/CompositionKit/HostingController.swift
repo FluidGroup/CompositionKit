@@ -44,59 +44,64 @@ final class FixedSafeAreaHostingController<Content: View>: UIHostingController<F
   
   @discardableResult
   private func fixApplied() -> Self {
-    self.fixSafeAreaInsets()
+    _ = _once_
+    view._fixing_safeArea = true
     return self
   }
-  
-  private func fixSafeAreaInsets() {
-    guard let _class = view?.classForCoder else {
-      assertionFailure()
-      return
-    }
-    
-    let safeAreaInsets: @convention(block) (AnyObject) -> UIEdgeInsets = {
-      (sself: AnyObject!) -> UIEdgeInsets in
-      return .zero
-    }
-    
-    guard let method = class_getInstanceMethod(_class.self, #selector(getter:UIView.safeAreaInsets))
-    else {
-      return
-    }
-    
-    class_replaceMethod(
-      _class,
-      #selector(getter:UIView.safeAreaInsets),
-      imp_implementationWithBlock(safeAreaInsets),
-      method_getTypeEncoding(method)
-    )
-    
-    let safeAreaLayoutGuide: @convention(block) (AnyObject) -> UILayoutGuide? = {
-      (sself: AnyObject!) -> UILayoutGuide? in return nil
-    }
-    
-    guard
-      let method2 = class_getInstanceMethod(
-        _class.self,
-        #selector(getter:UIView.safeAreaLayoutGuide)
-      )
-    else {
-      return
-    }
-    
-    class_replaceMethod(
-      _class,
-      #selector(getter:UIView.safeAreaLayoutGuide),
-      imp_implementationWithBlock(safeAreaLayoutGuide),
-      method_getTypeEncoding(method2)
-    )
-    
-  }
-  
+
   override var prefersStatusBarHidden: Bool {
     return false
   }
   
+}
+
+private let _once_: Void = {
+  UIView.replace()
+}()
+
+private var _key: Void?
+
+extension UIView {
+
+  fileprivate static func replace() {
+
+    method_exchangeImplementations(
+      class_getInstanceMethod(self, #selector(getter:UIView.safeAreaInsets))!,
+      class_getInstanceMethod(self, #selector(getter:UIView._hosting_safeAreaInsets))!
+    )
+
+    method_exchangeImplementations(
+      class_getInstanceMethod(self, #selector(getter:UIView.safeAreaLayoutGuide))!,
+      class_getInstanceMethod(self, #selector(getter:UIView._hosting_safeAreaLayoutGuide))!
+    )
+
+  }
+
+  fileprivate var _fixing_safeArea: Bool {
+    get {
+      (objc_getAssociatedObject(self, &_key) as? Bool) ?? false
+    }
+    set {
+      objc_setAssociatedObject(self, &_key, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
+    }
+  }
+
+  @objc dynamic var _hosting_safeAreaInsets: UIEdgeInsets {
+    if _fixing_safeArea {
+      return .zero
+    } else {
+      return self._hosting_safeAreaInsets
+    }
+  }
+
+  @objc dynamic var _hosting_safeAreaLayoutGuide: UILayoutGuide? {
+    if _fixing_safeArea {
+      return nil
+    } else {
+     return self._hosting_safeAreaLayoutGuide
+    }
+  }
+
 }
 
 @available(iOS 13, *)
