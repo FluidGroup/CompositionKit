@@ -22,12 +22,12 @@ final class HostingController<Content: View>: UIHostingController<Content>, _Hos
 /// https://stackoverflow.com/a/62421114
 /// https://twitter.com/b3ll/status/1193747288302075906
 @available(iOS 13, *)
-final class FixedSafeAreaHostingController<Content: View>: UIHostingController<FixedSafeArea<Content>>, _HostingControllerType {
+final class FixedSafeAreaHostingController<Content: View>: UIHostingController<Content>, _HostingControllerType {
   
   var onViewDidLayoutSubviews: (UIViewController) -> Void = { _ in }
   
-  init(rootView: Content) {
-    super.init(rootView: .init(content: rootView))
+  override init(rootView: Content) {
+    super.init(rootView: rootView)
     
     fixApplied()
   }
@@ -102,14 +102,4 @@ extension UIView {
     }
   }
 
-}
-
-@available(iOS 13, *)
-public struct FixedSafeArea<Content: View>: View {
-  
-  let content: Content
-  
-  public var body: some View {
-    content
-  }
 }
