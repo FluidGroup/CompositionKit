@@ -22,6 +22,7 @@ struct RootView<State>: SwiftUI.View {
 /**
  A view that hosts SwiftUI for UIKit environment.
  */
+@available(*, deprecated, message: "Use SwiftUIHostingView instead. from https://github.com/muukii/swiftui-Hosting")
 @available(iOS 13, *)
 open class HostingView: UIView {
 
@@ -192,6 +193,7 @@ open class HostingView: UIView {
 /**
  A subclass of ``HostingView`` that opt-in fixing safe-area issue.
  */
+@available(*, deprecated, message: "Use SwiftUIHostingView instead. from https://github.com/muukii/swiftui-Hosting")
 @available(iOS 13, *)
 open class IgnoringSafeAreaHostingView: HostingView {
   
