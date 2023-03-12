@@ -8,10 +8,27 @@ open class AnyUIView: UIView {
 
   private var _onDeinit: (() -> Void)?
 
-  public init(@EntrypointBuilder build: (AnyUIView) -> [EntrypointBuilder.Either]) {
+  public init(
+    _ name: String = "",
+    _ file: StaticString = #file,
+    _ function: StaticString = #function,
+    _ line: UInt = #line,
+    @EntrypointBuilder build: (AnyUIView) -> [EntrypointBuilder.Either]
+  ) {
 
     super.init(frame: .null)
 
+#if DEBUG
+    let file = URL(string: file.description)?.deletingPathExtension().lastPathComponent ?? "unknown"
+    self.accessibilityIdentifier = [
+      name,
+      file,
+      function.description,
+      line.description
+    ]
+      .joined(separator: ".")
+#endif
+    
     let _b: () -> [EntrypointBuilder.Either] = {
       build(self)
     }
