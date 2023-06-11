@@ -149,7 +149,7 @@ public final class InteractiveView<ContentView: UIView>: UIView {
 
 }
 
-public final class HighlightView<ContentView: UIView>: UIView, DynamicContentListCellContentType {
+public final class HighlightView<ContentView: UIView>: UIView {
   
   public var isHighlighted: Bool = false {
     didSet {
