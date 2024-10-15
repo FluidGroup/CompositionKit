@@ -36,7 +36,7 @@ public enum Book_NavigationHostingView {
         $0.setTitle("Dismiss", for: .normal)
       }
 
-      let navigationContentView = AnyView { view in
+      let navigationContentView = AnyUIView { view in
         ZStackBlock {
           HStackBlock {
             dismissButton
