@@ -11,7 +11,6 @@
 		4B70998D2856EB7B00BAE257 /* StorybookKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4B70998C2856EB7B00BAE257 /* StorybookKit */; };
 		4B70998F2856EB7B00BAE257 /* StorybookUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4B70998E2856EB7B00BAE257 /* StorybookUI */; };
 		4B7803C12780455300436AAB /* CompositionKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4B7803C02780455300436AAB /* CompositionKit */; };
-		4B7803C32780458C00436AAB /* Book.VGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7803C22780458C00436AAB /* Book.VGridView.swift */; };
 		4B959B092764F77E0003FFB6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B959B082764F77E0003FFB6 /* AppDelegate.swift */; };
 		4B959B0D2764F77E0003FFB6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B959B0C2764F77E0003FFB6 /* ViewController.swift */; };
 		4B959B122764F77F0003FFB6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B959B112764F77F0003FFB6 /* Assets.xcassets */; };
@@ -28,7 +27,6 @@
 
 /* Begin PBXFileReference section */
 		4B618C2A277062EF000EA3A4 /* Book.NavigationHostingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.NavigationHostingView.swift; sourceTree = "<group>"; };
-		4B7803C22780458C00436AAB /* Book.VGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.VGridView.swift; sourceTree = "<group>"; };
 		4B959B062764F77E0003FFB6 /* CompositionKit-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CompositionKit-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B959B082764F77E0003FFB6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4B959B0C2764F77E0003FFB6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -89,7 +87,6 @@
 				4BEF735C2859BBB100A36665 /* Book.DynamicAnimator.swift */,
 				4BC61D2528523B3C00354E61 /* Book.HostingView.swift */,
 				4B618C2A277062EF000EA3A4 /* Book.NavigationHostingView.swift */,
-				4B7803C22780458C00436AAB /* Book.VGridView.swift */,
 				4B959B212764F8300003FFB6 /* RootContainerViewController.swift */,
 				4B959B0C2764F77E0003FFB6 /* ViewController.swift */,
 				4B959B112764F77F0003FFB6 /* Assets.xcassets */,
@@ -204,7 +201,6 @@
 				4BC61D2628523B3C00354E61 /* Book.HostingView.swift in Sources */,
 				4BEF735D2859BBB100A36665 /* Book.DynamicAnimator.swift in Sources */,
 				4B959B222764F8300003FFB6 /* RootContainerViewController.swift in Sources */,
-				4B7803C32780458C00436AAB /* Book.VGridView.swift in Sources */,
 				4B959B202764F8200003FFB6 /* Book.swift in Sources */,
 				4B618C2B277062EF000EA3A4 /* Book.NavigationHostingView.swift in Sources */,
 				4BF6ED6227706EE000E39ABC /* UIControl+Closure.swift in Sources */,

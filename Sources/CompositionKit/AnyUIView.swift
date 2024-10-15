@@ -1,9 +1,6 @@
 import UIKit
 import MondrianLayout
 
-@available(*, deprecated, renamed: "AnyUIView", message: "To avoid confliting with SwiftUI.AnyView")
-public typealias AnyView = AnyUIView
-
 open class AnyUIView: UIView {
 
   private var _onDeinit: (() -> Void)?
